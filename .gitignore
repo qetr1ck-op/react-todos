@@ -10,7 +10,7 @@
 /build
 
 # ide
-/.idea
+.idea
 
 # misc
 .DS_Store
