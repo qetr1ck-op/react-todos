@@ -1,10 +1,14 @@
 import React, { PureComponent } from 'react'
-import { NavLink } from 'react-router-dom'
+import './header-root.css'
+import { Logo, Search } from './shared'
 
 export class HeaderRoot extends PureComponent {
   render() {
-    return <div>
-      <NavLink to={'/'}>Root</NavLink>
-    </div>
+    return (
+      <div className="header-root">
+        <Logo />
+        <Search />
+      </div>
+    )
   }
 }

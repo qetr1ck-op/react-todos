@@ -12,12 +12,13 @@ export class Root extends React.Component {
   render() {
     return (
       <Router history={createBrowserHistory()}>
-        <div className="app">
+        <div className="root">
+          <HeaderRoot />
+
           <Switch>
             <Route exact path="/" component={Pulls} />
             <Route component={NotFound} />
           </Switch>
-          <HeaderRoot />
         </div>
       </Router>
     )

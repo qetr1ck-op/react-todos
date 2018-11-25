@@ -1,6 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Root } from "./components";
-import "./index.css";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Root } from './components'
 
-ReactDOM.render(<Root />, document.getElementById("root") as HTMLElement);
+import 'normalize.css'
+import './index.css'
+
+ReactDOM.render(<Root />, document.getElementById('root') as HTMLElement)
