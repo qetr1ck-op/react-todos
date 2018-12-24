@@ -1,7 +1,7 @@
 // https://gist.github.com/jed/982883
 /* tslint:disable */
 export function uuid(
-  a: any, // placeholder
+  a?: any, // placeholder
 ): string {
   return a // if the placeholder was passed, return
     ? // a random number from 0 to 15

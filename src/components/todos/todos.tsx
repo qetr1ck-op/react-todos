@@ -1,6 +1,6 @@
 import React from 'react'
-import uuid from 'uuid'
 
+import { uuid } from './services'
 import { TodoInput } from './shared'
 import { TodoList } from './shared/todo-list'
 
