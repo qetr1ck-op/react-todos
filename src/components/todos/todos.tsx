@@ -13,7 +13,7 @@ interface IState {
 export interface ITodo {
   value: string
   done: boolean
-  id?: string
+  id: string
 }
 
 export enum TodoFilter {
@@ -43,6 +43,7 @@ export class Todos extends React.Component<{}, IState> {
           filter={this.state.filter}
           statusChange={this.statusChange}
           valueChange={this.valueChange}
+          delete={this.delete}
         />
       </div>
     )
@@ -77,6 +78,13 @@ export class Todos extends React.Component<{}, IState> {
         }
         return todo
       }),
+    }))
+  }
+
+  private delete = ({ id }: { id: string }) => {
+    this.setState((state: IState) => ({
+      ...state,
+      todos: this.state.todos.filter((todo: ITodo) => todo.id !== id),
     }))
   }
 }

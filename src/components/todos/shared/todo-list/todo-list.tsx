@@ -10,6 +10,7 @@ interface IProps {
   filters: TodoFilter[]
   filter: TodoFilter
   statusChange(changes: { id: string }): void
+  delete(changes: { id: string }): void
   valueChange(changes: { id: string; value: string }): void
 }
 
@@ -26,6 +27,7 @@ export class TodoList extends React.Component<IProps, IState> {
                   todo={todo}
                   statusChange={this.statusChange}
                   valueChange={this.valueChange}
+                  delete={(changes: { id: string }) => this.props.delete({ id: changes.id })}
                 />
               </li>
             ))}

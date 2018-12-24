@@ -12,7 +12,7 @@ export class TodoInput extends React.Component<IProps, IState> {
   state = {
     value: '',
   }
-  private ENTER_CODE = 13
+
   render() {
     const { value } = this.state
     return (
@@ -23,7 +23,8 @@ export class TodoInput extends React.Component<IProps, IState> {
   }
 
   private keyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.charCode === this.ENTER_CODE && this.isValid) {
+    const ENTER_CODE = 13
+    if (e.charCode === ENTER_CODE && this.isValid) {
       this.props.onAdd({ value: this.state.value })
       this.setState({ value: '' })
     }
