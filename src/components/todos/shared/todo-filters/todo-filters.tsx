@@ -1,10 +1,11 @@
 import React from 'react'
-import { TodoFilter } from '../../todos'
+import { Link } from 'react-router-dom'
+
+import { routes, TodoRoute } from '../../../root'
 
 interface IState {}
 interface IProps {
-  activeFilter: TodoFilter,
-  filters: TodoFilter[]
+  filters: TodoRoute[]
 }
 
 export class TodoFilters extends React.Component<IProps, IState> {
@@ -12,12 +13,16 @@ export class TodoFilters extends React.Component<IProps, IState> {
     const { filters } = this.props
     return (
       <div>
-        {filters.map(filter => (<button key={filter} onClick={this.change.bind(this, filter)}>{filter}</button>))}
+        {filters.map((filter) => {
+          const route = routes[filter]
+
+          return (
+            <Link key={route.label} to={route.path}>
+              {route.label}{'  '}
+            </Link>
+          )
+        })}
       </div>
     )
-  }
-
-  private change(filter: TodoFilter) {
-    console.log(filter);
   }
 }

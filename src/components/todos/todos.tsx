@@ -1,13 +1,17 @@
 import React from 'react'
 
+import { TodoRoute } from '../root'
 import { uuid } from './services'
 import { TodoInput } from './shared'
 import { TodoList } from './shared/todo-list'
 
 interface IState {
   todos: ITodo[]
-  filter: TodoFilter
-  filters: TodoFilter[]
+  filters: string[]
+}
+
+interface IProps {
+  filter: TodoRoute
 }
 
 export interface ITodo {
@@ -16,17 +20,26 @@ export interface ITodo {
   id: string
 }
 
-export enum TodoFilter {
-  ACTIVE = 'ACTIVE',
-  DONE = 'DONE',
-  ALL = 'ALL',
-}
+export class Todos extends React.Component<IProps, IState> {
+  private get uuid() {
+    return uuid()
+  }
 
-export class Todos extends React.Component<{}, IState> {
   state = {
     todos: [],
-    filter: TodoFilter.ALL,
-    filters: [TodoFilter.ACTIVE, TodoFilter.DONE, TodoFilter.ALL],
+    filters: [TodoRoute.All, TodoRoute.Active, TodoRoute.Done],
+  }
+
+  // static getDerivedStateFromProps(props: IProps, state: IState) {
+  //   console.log(props)
+  //   console.log(state)
+  //   return null
+  // }
+  componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
+    if (this.props.filter === prevProps.filter) {
+      return
+    }
+    this.setState({ todos: this.applyFilter() })
   }
 
   render() {
@@ -40,7 +53,6 @@ export class Todos extends React.Component<{}, IState> {
         <TodoList
           todos={todos}
           filters={this.state.filters}
-          filter={this.state.filter}
           statusChange={this.statusChange}
           valueChange={this.valueChange}
           delete={this.delete}
@@ -53,9 +65,6 @@ export class Todos extends React.Component<{}, IState> {
       ...state,
       todos: [...this.state.todos, { value, id: this.uuid, done: false }],
     }))
-  }
-  private get uuid() {
-    return uuid()
   }
   private statusChange = ({ id }: { id: string; value: string }) => {
     this.setState((state: IState) => ({
@@ -86,5 +95,18 @@ export class Todos extends React.Component<{}, IState> {
       ...state,
       todos: this.state.todos.filter((todo: ITodo) => todo.id !== id),
     }))
+  }
+
+  private applyFilter(): ITodo[] {
+    const { todos } = this.state
+    const { filter } = this.props
+
+    if (filter === TodoRoute.Active) {
+      return todos.filter((todo: ITodo) => todo.done)
+    }
+    if (filter === TodoRoute.Done) {
+      return todos.filter((todo: ITodo) => !todo.done)
+    }
+    return todos
   }
 }

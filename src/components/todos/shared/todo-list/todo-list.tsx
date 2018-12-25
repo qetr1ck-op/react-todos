@@ -1,5 +1,6 @@
 import React from 'react'
-import { ITodo, TodoFilter } from '../../todos'
+import { TodoRoute } from '../../../root'
+import { ITodo } from '../../todos'
 import { TodoCount } from '../todo-count'
 import { TodoFilters } from '../todo-filters'
 import { TodoItem } from '../todo-item'
@@ -7,8 +8,7 @@ import { TodoItem } from '../todo-item'
 interface IState {}
 interface IProps {
   todos: ITodo[]
-  filters: TodoFilter[]
-  filter: TodoFilter
+  filters: TodoRoute[]
   statusChange(changes: { id: string }): void
   delete(changes: { id: string }): void
   valueChange(changes: { id: string; value: string }): void
@@ -16,7 +16,7 @@ interface IProps {
 
 export class TodoList extends React.Component<IProps, IState> {
   render() {
-    const { todos, filter, filters } = this.props
+    const { todos, filters } = this.props
     return (
       <div>
         {todos.length ? (
@@ -27,7 +27,7 @@ export class TodoList extends React.Component<IProps, IState> {
                   todo={todo}
                   statusChange={this.statusChange}
                   valueChange={this.valueChange}
-                  delete={(changes: { id: string }) => this.props.delete({ id: changes.id })}
+                  delete={this.deleteItem}
                 />
               </li>
             ))}
@@ -36,7 +36,7 @@ export class TodoList extends React.Component<IProps, IState> {
           'Empty list'
         )}
         <TodoCount todos={todos} />
-        <TodoFilters filters={filters} activeFilter={filter} />
+        <TodoFilters filters={filters}/>
       </div>
     )
   }
@@ -46,5 +46,9 @@ export class TodoList extends React.Component<IProps, IState> {
 
   private valueChange = (changes: { id: string; value: string }) => {
     this.props.valueChange(changes)
+  }
+
+  private deleteItem = (changes: { id: string }) => {
+    this.props.delete({ id: changes.id })
   }
 }
