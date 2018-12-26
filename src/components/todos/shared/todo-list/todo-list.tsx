@@ -1,13 +1,13 @@
 import React from 'react'
-import { TodoRoute } from '../../../root'
-import { ITodo } from '../../todos'
+import { TodoRoute } from '../../todos-routes'
+import { Todo } from '../../types'
 import { TodoCount } from '../todo-count'
 import { TodoFilters } from '../todo-filters'
 import { TodoItem } from '../todo-item'
 
 interface IState {}
 interface IProps {
-  todos: ITodo[]
+  todos: Todo[]
   filters: TodoRoute[]
   statusChange(changes: { id: string }): void
   delete(changes: { id: string }): void

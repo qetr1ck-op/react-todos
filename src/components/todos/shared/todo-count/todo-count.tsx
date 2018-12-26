@@ -1,18 +1,10 @@
 import React from 'react'
-import { ITodo } from '../../todos'
+import { Todo } from '../../types'
 
-interface IState {}
-interface IProps {
-  todos: ITodo[]
+interface Props {
+  todos: Todo[]
 }
 
-export class TodoCount extends React.Component<IProps, IState> {
-  render() {
-    const { todos } = this.props
-    return (
-      <div>
-        {todos.length}{' '}items left
-      </div>
-    )
-  }
+export function TodoCount({ todos }: Props) {
+  return <div>{todos.length} items left</div>
 }

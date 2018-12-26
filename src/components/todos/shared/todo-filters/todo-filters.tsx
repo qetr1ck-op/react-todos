@@ -1,28 +1,25 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { routes, TodoRoute } from '../../../root'
+import { routes, TodoRoute } from '../../todos-routes'
 
-interface IState {}
-interface IProps {
+interface Props {
   filters: TodoRoute[]
 }
 
-export class TodoFilters extends React.Component<IProps, IState> {
-  render() {
-    const { filters } = this.props
-    return (
-      <div>
-        {filters.map((filter) => {
-          const route = routes[filter]
+export function TodoFilters({ filters }: Props) {
+  return (
+    <div>
+      {filters.map((filter) => {
+        const { label, path } = routes[filter]
 
-          return (
-            <Link key={route.label} to={route.path}>
-              {route.label}{'  '}
-            </Link>
-          )
-        })}
-      </div>
-    )
-  }
+        return (
+          <Link key={label} to={path}>
+            {label}
+            {'  '}
+          </Link>
+        )
+      })}
+    </div>
+  )
 }

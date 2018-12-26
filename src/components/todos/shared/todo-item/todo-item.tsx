@@ -1,12 +1,12 @@
 import React, { ComponentLifecycle } from 'react'
-import { ITodo } from '../../todos'
+import { Todo } from '../../types'
 
 interface IState {
   isEditMode: boolean
   value: string
 }
 interface IProps {
-  todo: ITodo
+  todo: Todo
   statusChange(changes: { id: string }): void
   delete(changes: { id: string }): void
   valueChange(changes: { id: string; value: string }): void
