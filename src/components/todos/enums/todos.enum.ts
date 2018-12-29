@@ -3,3 +3,7 @@ export enum TodoFilters {
   Active = 'active',
   Done = 'done',
 }
+
+export enum Storage {
+  Todos = 'todos',
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, RouteComponentProps, Switch } from 'react-router'
 
-import { TodoFilters as TodoFiltersEnum } from './enums'
+import { Storage, TodoFilters as TodoFiltersEnum } from './enums'
 import { uuid } from './services'
 import { TodoFilters, TodoInput } from './shared'
 import { TodoList } from './shared/todo-list'
@@ -15,9 +15,13 @@ interface State {
 
 export class Todos extends React.Component<{}, State> {
   state = {
-    todos: [],
+    todos: this.getItems(),
     todo: '',
     filters: [TodoFiltersEnum.All, TodoFiltersEnum.Active, TodoFiltersEnum.Done],
+  }
+
+  componentDidUpdate(): void {
+    this.saveItems()
   }
 
   render() {
@@ -52,7 +56,7 @@ export class Todos extends React.Component<{}, State> {
       />
     )
   }
-  private get uuid() {
+  private get uuid(): string {
     return uuid()
   }
   private addNewItem = ({ value }: Todo) => {
@@ -102,5 +106,13 @@ export class Todos extends React.Component<{}, State> {
       return todos.filter((todo: Todo) => todo.done)
     }
     return todos
+  }
+
+  private saveItems = (): void => {
+    localStorage.setItem(Storage.Todos, JSON.stringify(this.state.todos))
+  }
+
+  private getItems(): Todo[] {
+    return JSON.parse(localStorage.getItem(Storage.Todos) as any) || []
   }
 }
