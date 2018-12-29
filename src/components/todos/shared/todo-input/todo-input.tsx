@@ -5,42 +5,65 @@ interface State {
 }
 interface Props {
   value: string
-  onAdd(prop: { value: string }): void
+  changeValue?(prop: { value: string }): void
+  exitEditMode?(prop: { value: string }): void
 }
 
 export class TodoInput extends React.PureComponent<Props, State> {
+  private get isValid(): boolean {
+    return !!this.state.value.length
+  }
   state = {
     value: '',
+  }
+
+  elRef = React.createRef<HTMLInputElement>()
+
+  componentDidMount(): void {
+    this.setState({ value: this.props.value })
+  }
+
+  componentDidUpdate() {
+    document.addEventListener('click', this.exitEditMode)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.exitEditMode)
   }
 
   render() {
     const { value } = this.state
     return (
-      <div>
-        <input type="text" value={value} onChange={this.change} onKeyPress={this.keyPress} />
-      </div>
+      <input
+        type="text"
+        value={value}
+        ref={this.elRef}
+        onChange={this.change}
+        onKeyPress={this.keyPress}
+      />
     )
   }
 
-  private changeValue(value: string): void {
-    this.setState({ value })
-  }
-
-  // TODO: to render props with global events
-  // or https://www.npmjs.com/package/react-keydown
   private keyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     const ENTER_CODE = 13
     if (e.charCode === ENTER_CODE && this.isValid) {
-      this.props.onAdd({ value: this.state.value })
-      this.changeValue('')
+      this.setState({ value: '' })
+      if (this.props.changeValue) {
+        this.props.changeValue({ value: this.state.value })
+      }
     }
   }
 
   private change = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.changeValue(e.target.value)
+    this.setState({ value: e.target.value })
   }
 
-  private get isValid(): boolean {
-    return !!this.state.value.length
+  private exitEditMode = (e: MouseEvent) => {
+    if ((this.elRef.current as HTMLDivElement).contains(e.target as HTMLElement)) {
+      return
+    }
+    if (this.props.exitEditMode) {
+      this.props.exitEditMode({ value: this.state.value })
+    }
   }
 }

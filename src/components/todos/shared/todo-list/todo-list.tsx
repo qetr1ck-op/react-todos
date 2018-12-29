@@ -1,22 +1,19 @@
 import React from 'react'
-import { TodoRoute } from '../../todos-routes'
+
 import { Todo } from '../../types'
 import { TodoCount } from '../todo-count'
-import { TodoFilters } from '../todo-filters'
 import { TodoItem } from '../todo-item'
 
-interface IState {}
-interface IProps {
+interface Props {
   todos: Todo[]
-  filters: TodoRoute[]
   statusChange(changes: { id: string }): void
-  delete(changes: { id: string }): void
+  deleteItem(changes: { id: string }): void
   valueChange(changes: { id: string; value: string }): void
 }
 
-export class TodoList extends React.Component<IProps, IState> {
+export class TodoList extends React.PureComponent<Props> {
   render() {
-    const { todos, filters } = this.props
+    const { todos } = this.props
     return (
       <div>
         {todos.length ? (
@@ -27,7 +24,7 @@ export class TodoList extends React.Component<IProps, IState> {
                   todo={todo}
                   statusChange={this.statusChange}
                   valueChange={this.valueChange}
-                  delete={this.deleteItem}
+                  deleteItem={this.deleteItem}
                 />
               </li>
             ))}
@@ -36,7 +33,6 @@ export class TodoList extends React.Component<IProps, IState> {
           'Empty list'
         )}
         <TodoCount todos={todos} />
-        <TodoFilters filters={filters}/>
       </div>
     )
   }
@@ -49,6 +45,6 @@ export class TodoList extends React.Component<IProps, IState> {
   }
 
   private deleteItem = (changes: { id: string }) => {
-    this.props.delete({ id: changes.id })
+    this.props.deleteItem({ id: changes.id })
   }
 }

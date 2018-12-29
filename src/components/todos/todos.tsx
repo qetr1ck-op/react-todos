@@ -1,47 +1,61 @@
 import React from 'react'
+import { Route, RouteComponentProps, Switch } from 'react-router'
 
+import { TodoFilters as TodoFiltersEnum } from './enums'
 import { uuid } from './services'
-import { TodoInput } from './shared'
+import { TodoFilters, TodoInput } from './shared'
 import { TodoList } from './shared/todo-list'
-import { TodoRoute } from './todos-routes'
 import { Todo } from './types'
 
 interface State {
   todos: Todo[]
+  todo: string
   filters: string[]
 }
 
-interface Props {
-  filter: TodoRoute
-}
-
-export class Todos extends React.Component<Props, State> {
+export class Todos extends React.Component<{}, State> {
   state = {
     todos: [],
-    filters: [TodoRoute.All, TodoRoute.Active, TodoRoute.Done],
+    todo: '',
+    filters: [TodoFiltersEnum.All, TodoFiltersEnum.Active, TodoFiltersEnum.Done],
   }
 
   render() {
+    const { todo, filters } = this.state
+
     return (
       <div>
         <pre>{JSON.stringify(this.state, null, 2)}</pre>
 
-        <TodoInput value={''} onAdd={this.onAdd} />
+        <div>
+          <TodoInput value={todo} changeValue={this.addNewItem} />
+        </div>
 
-        <TodoList
-          todos={this.applyFilter()}
-          filters={this.state.filters}
-          statusChange={this.statusChange}
-          valueChange={this.valueChange}
-          delete={this.delete}
-        />
+        <Switch>
+          <Route exact path="/" render={this.renderComponent(TodoFiltersEnum.All)} />
+          <Route path="/active" render={this.renderComponent(TodoFiltersEnum.Active)} />
+          <Route path="/done" render={this.renderComponent(TodoFiltersEnum.Done)} />
+        </Switch>
+
+        <TodoFilters filters={filters} />
       </div>
+    )
+  }
+  private renderComponent = (filter: TodoFiltersEnum) => {
+    return (props: RouteComponentProps) => (
+      <TodoList
+        {...props}
+        todos={this.applyFilter(filter)}
+        statusChange={this.statusChange}
+        valueChange={this.valueChange}
+        deleteItem={this.deleteItem}
+      />
     )
   }
   private get uuid() {
     return uuid()
   }
-  private onAdd = ({ value }: Todo) => {
+  private addNewItem = ({ value }: Todo) => {
     this.setState((state: State) => ({
       ...state,
       todos: [...this.state.todos, { value, id: this.uuid, done: false }],
@@ -71,21 +85,20 @@ export class Todos extends React.Component<Props, State> {
     }))
   }
 
-  private delete = ({ id }: { id: string }) => {
+  private deleteItem = ({ id }: { id: string }) => {
     this.setState((state: State) => ({
       ...state,
       todos: this.state.todos.filter((todo: Todo) => todo.id !== id),
     }))
   }
 
-  private applyFilter(): Todo[] {
+  private applyFilter(filter: TodoFiltersEnum): Todo[] {
     const { todos } = this.state
-    const { filter } = this.props
 
-    if (filter === TodoRoute.Active) {
+    if (filter === TodoFiltersEnum.Active) {
       return todos.filter((todo: Todo) => !todo.done)
     }
-    if (filter === TodoRoute.Done) {
+    if (filter === TodoFiltersEnum.Done) {
       return todos.filter((todo: Todo) => todo.done)
     }
     return todos

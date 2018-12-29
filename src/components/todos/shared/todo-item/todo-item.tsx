@@ -1,71 +1,54 @@
-import React, { ComponentLifecycle } from 'react'
+import React from 'react'
 import { Todo } from '../../types'
+import { TodoInput } from '../todo-input'
 
-interface IState {
+interface State {
   isEditMode: boolean
-  value: string
 }
-interface IProps {
+interface Props {
   todo: Todo
   statusChange(changes: { id: string }): void
-  delete(changes: { id: string }): void
   valueChange(changes: { id: string; value: string }): void
+  deleteItem(changes: { id: string }): void
 }
 
-export class TodoItem extends React.Component<IProps, IState>
-  implements ComponentLifecycle<IProps, IState> {
-  private get isValid(): boolean {
-    return !!this.state.value.length
-  }
-
+export class TodoItem extends React.PureComponent<Props, State> {
   state = {
     isEditMode: false,
-    value: '',
   }
 
-  private elRef = React.createRef<HTMLDivElement>()
-  componentDidMount() {
-    this.setState({ value: this.props.todo.value })
-  }
   render() {
-    const { done } = this.props.todo
-    const { isEditMode, value } = this.state
+    const { done, value } = this.props.todo
+    const { isEditMode } = this.state
     return (
-      <div ref={this.elRef}>
+      <div>
         <input type="checkbox" checked={done} onChange={this.changeStatus} />
         {isEditMode ? (
-          <input type="text" value={value} onChange={this.changeValue} onKeyPress={this.keyPress} />
+          <TodoInput
+            value={value}
+            changeValue={this.changeValue}
+            exitEditMode={this.exitEditMode}
+          />
         ) : (
           <>
             <label onDoubleClick={this.enterUpdateMode}>{value}</label>
-            <button onClick={this.delete}>X</button>
+            <button onClick={this.deleteItem}>X</button>
           </>
         )}
       </div>
     )
   }
 
-  componentDidUpdate() {
-    document.addEventListener('click', this.exitEditMode)
-  }
+  private exitEditMode = ({ value }) => {
+    const { id } = this.props.todo
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.exitEditMode)
-  }
-
-  private exitEditMode = (e: MouseEvent) => {
-    const { id, value } = this.props.todo
-    if (!this.state.isEditMode || this.elRef.current!.contains(e.target as HTMLElement)) {
-      return
-    }
     this.setState({ isEditMode: false })
     this.props.valueChange({ id, value })
   }
 
-  private changeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (this.isValid) {
-      this.setState({ value: e.target.value })
-    }
+  private changeValue = ({ value }) => {
+    this.setState({ isEditMode: false })
+    this.props.valueChange({ id: this.props.todo.id, value })
   }
 
   private changeStatus = () => {
@@ -76,15 +59,7 @@ export class TodoItem extends React.Component<IProps, IState>
     this.setState({ isEditMode: true })
   }
 
-  private keyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const ENTER_CODE = 13
-    if (e.charCode === ENTER_CODE && this.isValid) {
-      this.setState({ value: (e.target as HTMLInputElement).value, isEditMode: false })
-      this.props.valueChange({ id: this.props.todo.id, value: this.state.value })
-    }
-  }
-
-  private delete = () => {
-    this.props.delete({ id: this.props.todo.id })
+  private deleteItem = () => {
+    this.props.deleteItem({ id: this.props.todo.id })
   }
 }
