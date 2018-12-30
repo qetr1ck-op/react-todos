@@ -1,16 +1,16 @@
 import React from 'react'
 import { Route, RouteComponentProps, Switch } from 'react-router'
 
-import { Storage, TodoFilters as TodoFiltersEnum } from './enums'
+import { Storage, TodoFilters } from './enums'
 import { uuid } from './services'
-import { TodoFilters, TodoInput } from './shared'
+import { TodoInput } from './shared'
 import { TodoList } from './shared/todo-list'
 import { Todo } from './types'
 
 interface State {
   todos: Todo[]
   todo: string
-  filters: string[]
+  filters: TodoFilters[]
   allChecked: boolean
 }
 
@@ -18,8 +18,8 @@ export class Todos extends React.Component<{}, State> {
   state = {
     todos: this.getItems(),
     todo: '',
-    filters: [TodoFiltersEnum.All, TodoFiltersEnum.Active, TodoFiltersEnum.Done],
-    allChecked: false
+    filters: [TodoFilters.All, TodoFilters.Active, TodoFilters.Done],
+    allChecked: false,
   }
 
   componentDidUpdate(): void {
@@ -27,40 +27,47 @@ export class Todos extends React.Component<{}, State> {
   }
 
   render() {
-    const { todo, filters, allChecked } = this.state
+    const { todos, todo, allChecked } = this.state
 
     return (
       <div>
         <pre>{JSON.stringify(this.state, null, 2)}</pre>
 
         <div>
-          <input type="checkbox" checked={allChecked} onChange={this.checkAllItems} />
+          {!!todos.length && (
+            <input type="checkbox" checked={allChecked} onChange={this.checkAllItems} />
+          )}
           <TodoInput value={todo} changeValue={this.addNewItem} />
         </div>
 
         <Switch>
-          <Route exact path="/" render={this.renderComponent(TodoFiltersEnum.All)} />
-          <Route path="/active" render={this.renderComponent(TodoFiltersEnum.Active)} />
-          <Route path="/done" render={this.renderComponent(TodoFiltersEnum.Done)} />
+          <Route exact path="/" render={this.renderComponent(TodoFilters.All)} />
+          <Route path="/active" render={this.renderComponent(TodoFilters.Active)} />
+          <Route path="/done" render={this.renderComponent(TodoFilters.Done)} />
         </Switch>
-
-        <TodoFilters filters={filters} />
       </div>
     )
   }
-  private renderComponent = (filter: TodoFiltersEnum) => {
+  private renderComponent = (filter: TodoFilters) => {
     return (props: RouteComponentProps) => (
       <TodoList
         {...props}
         todos={this.applyFilter(filter)}
+        totalTodos={this.state.todos.length}
+        filters={this.state.filters}
         statusChange={this.statusChange}
         valueChange={this.valueChange}
         deleteItem={this.deleteItem}
+        deleteDoneItems={this.deleteDoneItems}
+        hasDoneItems={this.hasDoneItems()}
       />
     )
   }
   private get uuid(): string {
     return uuid()
+  }
+  private hasDoneItems = (): boolean => {
+    return this.state.todos.some((todo) => todo.done)
   }
   private addNewItem = ({ value }: Todo) => {
     this.setState((state: State) => ({
@@ -99,13 +106,13 @@ export class Todos extends React.Component<{}, State> {
     }))
   }
 
-  private applyFilter(filter: TodoFiltersEnum): Todo[] {
+  private applyFilter(filter: TodoFilters): Todo[] {
     const { todos } = this.state
 
-    if (filter === TodoFiltersEnum.Active) {
+    if (filter === TodoFilters.Active) {
       return todos.filter((todo: Todo) => !todo.done)
     }
-    if (filter === TodoFiltersEnum.Done) {
+    if (filter === TodoFilters.Done) {
       return todos.filter((todo: Todo) => todo.done)
     }
     return todos
@@ -116,6 +123,14 @@ export class Todos extends React.Component<{}, State> {
       ...state,
       allChecked: !state.allChecked,
       todos: state.todos.map((todo: Todo) => ({ ...todo, done: !state.allChecked })),
+    }))
+  }
+
+  private deleteDoneItems = () => {
+    this.setState((state: State) => ({
+      ...state,
+      allChecked: false,
+      todos: state.todos.filter((todo: Todo) => !todo.done),
     }))
   }
 

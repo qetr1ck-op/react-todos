@@ -1,50 +1,54 @@
 import React from 'react'
 
+import { TodoFilters as TodoFiltersEnum } from '../../enums'
 import { Todo } from '../../types'
 import { TodoCount } from '../todo-count'
+import { TodoDeleteDone } from '../todo-delete-done'
+import { TodoFilters } from '../todo-filters'
 import { TodoItem } from '../todo-item'
 
 interface Props {
   todos: Todo[]
+  totalTodos: number
+  filters: TodoFiltersEnum[]
+  hasDoneItems: boolean
   statusChange(changes: { id: string }): void
   deleteItem(changes: { id: string }): void
   valueChange(changes: { id: string; value: string }): void
+  deleteDoneItems(): void
 }
 
-export class TodoList extends React.PureComponent<Props> {
-  render() {
-    const { todos } = this.props
-    return (
-      <div>
-        {todos.length ? (
+export function TodoList({
+  todos,
+  totalTodos,
+  filters,
+  deleteItem,
+  statusChange,
+  valueChange,
+  deleteDoneItems,
+  hasDoneItems,
+}: Props) {
+  return (
+    <div>
+      {!!totalTodos && (
+        <>
           <ul>
             {todos.map((todo) => (
               <li key={todo.id}>
                 <TodoItem
                   todo={todo}
-                  statusChange={this.statusChange}
-                  valueChange={this.valueChange}
-                  deleteItem={this.deleteItem}
+                  statusChange={statusChange}
+                  valueChange={valueChange}
+                  deleteItem={deleteItem}
                 />
               </li>
             ))}
           </ul>
-        ) : (
-          'Empty list'
-        )}
-        <TodoCount todos={todos} />
-      </div>
-    )
-  }
-  private statusChange = (changes: { id: string }) => {
-    this.props.statusChange(changes)
-  }
-
-  private valueChange = (changes: { id: string; value: string }) => {
-    this.props.valueChange(changes)
-  }
-
-  private deleteItem = (changes: { id: string }) => {
-    this.props.deleteItem({ id: changes.id })
-  }
+          <TodoCount todos={todos} />
+          <TodoFilters filters={filters} />
+          {hasDoneItems && <TodoDeleteDone deleteDoneItems={deleteDoneItems} />}
+        </>
+      )}
+    </div>
+  )
 }
