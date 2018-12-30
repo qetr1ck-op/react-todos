@@ -11,6 +11,7 @@ interface State {
   todos: Todo[]
   todo: string
   filters: string[]
+  allChecked: boolean
 }
 
 export class Todos extends React.Component<{}, State> {
@@ -18,6 +19,7 @@ export class Todos extends React.Component<{}, State> {
     todos: this.getItems(),
     todo: '',
     filters: [TodoFiltersEnum.All, TodoFiltersEnum.Active, TodoFiltersEnum.Done],
+    allChecked: false
   }
 
   componentDidUpdate(): void {
@@ -25,13 +27,14 @@ export class Todos extends React.Component<{}, State> {
   }
 
   render() {
-    const { todo, filters } = this.state
+    const { todo, filters, allChecked } = this.state
 
     return (
       <div>
         <pre>{JSON.stringify(this.state, null, 2)}</pre>
 
         <div>
+          <input type="checkbox" checked={allChecked} onChange={this.checkAllItems} />
           <TodoInput value={todo} changeValue={this.addNewItem} />
         </div>
 
@@ -106,6 +109,14 @@ export class Todos extends React.Component<{}, State> {
       return todos.filter((todo: Todo) => todo.done)
     }
     return todos
+  }
+
+  private checkAllItems = () => {
+    this.setState((state: State) => ({
+      ...state,
+      allChecked: !state.allChecked,
+      todos: state.todos.map((todo: Todo) => ({ ...todo, done: !state.allChecked })),
+    }))
   }
 
   private saveItems = (): void => {
