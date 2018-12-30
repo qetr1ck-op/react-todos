@@ -3,7 +3,7 @@ import { Route, RouteComponentProps, Switch } from 'react-router'
 
 import { Storage, TodoFilters } from './enums'
 import { uuid } from './services'
-import { TodoInput } from './shared'
+import { TodoCheckAll, TodoInput } from './shared'
 import { TodoList } from './shared/todo-list'
 import { Todo } from './types'
 
@@ -11,7 +11,7 @@ interface State {
   todos: Todo[]
   todo: string
   filters: TodoFilters[]
-  allChecked: boolean
+  isAllChecked: boolean
 }
 
 export class Todos extends React.Component<{}, State> {
@@ -19,7 +19,7 @@ export class Todos extends React.Component<{}, State> {
     todos: this.getItems(),
     todo: '',
     filters: [TodoFilters.All, TodoFilters.Active, TodoFilters.Done],
-    allChecked: false,
+    isAllChecked: false,
   }
 
   componentDidUpdate(): void {
@@ -27,7 +27,7 @@ export class Todos extends React.Component<{}, State> {
   }
 
   render() {
-    const { todos, todo, allChecked } = this.state
+    const { todos, todo, isAllChecked } = this.state
 
     return (
       <div>
@@ -35,7 +35,7 @@ export class Todos extends React.Component<{}, State> {
 
         <div>
           {!!todos.length && (
-            <input type="checkbox" checked={allChecked} onChange={this.checkAllItems} />
+            <TodoCheckAll isAllChecked={isAllChecked} checkAll={this.checkAllItems} />
           )}
           <TodoInput value={todo} changeValue={this.addNewItem} />
         </div>
@@ -121,15 +121,15 @@ export class Todos extends React.Component<{}, State> {
   private checkAllItems = () => {
     this.setState((state: State) => ({
       ...state,
-      allChecked: !state.allChecked,
-      todos: state.todos.map((todo: Todo) => ({ ...todo, done: !state.allChecked })),
+      isAllChecked: !state.isAllChecked,
+      todos: state.todos.map((todo: Todo) => ({ ...todo, done: !state.isAllChecked })),
     }))
   }
 
   private deleteDoneItems = () => {
     this.setState((state: State) => ({
       ...state,
-      allChecked: false,
+      isAllChecked: false,
       todos: state.todos.filter((todo: Todo) => !todo.done),
     }))
   }
