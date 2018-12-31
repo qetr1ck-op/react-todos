@@ -1,4 +1,7 @@
 import React from 'react'
+
+import style from './todo-item.css';
+
 import { Todo } from '../../types'
 import { TodoInput } from '../todo-input'
 
@@ -21,7 +24,7 @@ export class TodoItem extends React.PureComponent<Props, State> {
     const { done, value } = this.props.todo
     const { isEditMode } = this.state
     return (
-      <div>
+      <div className={style.item}>
         <input type="checkbox" checked={done} onChange={this.changeStatus} />
         {isEditMode ? (
           <TodoInput

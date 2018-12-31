@@ -1,0 +1,21 @@
+.checkAll {
+  position: absolute;
+  visibility: hidden;
+}
+
+.label {
+  position: absolute;
+  top: 20px;
+}
+
+.label:before {
+  content: '❯';
+  font-size: 22px;
+  color: #e6e6e6;
+  padding: 10px 27px 10px 27px;
+}
+
+.label.checked:before {
+  color: #808080;
+}
+

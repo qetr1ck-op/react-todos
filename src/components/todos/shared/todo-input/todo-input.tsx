@@ -1,5 +1,7 @@
 import React from 'react'
 
+import style from './todo-input.css';
+
 interface State {
   value: string
 }
@@ -36,6 +38,8 @@ export class TodoInput extends React.PureComponent<Props, State> {
     return (
       <input
         type="text"
+        placeholder="What needs to be done?"
+        className={style.input}
         value={value}
         ref={this.elRef}
         onChange={this.change}

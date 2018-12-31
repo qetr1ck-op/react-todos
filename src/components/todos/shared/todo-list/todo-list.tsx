@@ -1,5 +1,7 @@
 import React from 'react'
 
+import style from './todo-list.css'
+
 import { TodoFilters as TodoFiltersEnum } from '../../enums'
 import { Todo } from '../../types'
 import { TodoCount } from '../todo-count'
@@ -32,7 +34,7 @@ export function TodoList({
     <div>
       {!!totalTodos && (
         <>
-          <ul>
+          <ul className={style.list}>
             {todos.map((todo) => (
               <li key={todo.id}>
                 <TodoItem
