@@ -46,9 +46,13 @@ export function TodoList({
               </li>
             ))}
           </ul>
-          <TodoCount todos={todos} />
-          <TodoFilters filters={filters} />
-          {hasDoneItems && <TodoDeleteDone deleteDoneItems={deleteDoneItems} />}
+          <div className={style.footer}>
+            <TodoCount todos={todos} />
+            <TodoFilters filters={filters} />
+            <div style={{ visibility: hasDoneItems ? 'visible' : 'hidden' }}>
+              <TodoDeleteDone deleteDoneItems={deleteDoneItems} />
+            </div>
+          </div>
         </>
       )}
     </div>

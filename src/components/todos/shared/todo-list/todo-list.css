@@ -1,5 +1,12 @@
 .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  opacity: .6;
 }

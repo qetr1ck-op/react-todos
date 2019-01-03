@@ -1,6 +1,6 @@
 import React from 'react'
 
-import style from './todo-item.css';
+import style from './todo-item.css'
 
 import { Todo } from '../../types'
 import { TodoInput } from '../todo-input'
@@ -21,21 +21,29 @@ export class TodoItem extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { done, value } = this.props.todo
+    const { done, value, id } = this.props.todo
     const { isEditMode } = this.state
     return (
       <div className={style.item}>
-        <input type="checkbox" checked={done} onChange={this.changeStatus} />
+        <input
+          id={id}
+          className={style.checkbox}
+          type="checkbox"
+          checked={done}
+          onChange={this.changeStatus}
+        />
+        <label className={style.checkboxLabel} htmlFor={id} />
         {isEditMode ? (
           <TodoInput
             value={value}
             changeValue={this.changeValue}
             exitEditMode={this.exitEditMode}
+            cssClasses={[style.editInput]}
           />
         ) : (
           <>
-            <label onDoubleClick={this.enterUpdateMode}>{value}</label>
-            <button onClick={this.deleteItem}>X</button>
+            <label className={style.itemLabel} onDoubleClick={this.enterUpdateMode}>{value}</label>
+            <button className={style.delete} onClick={this.deleteItem} />
           </>
         )}
       </div>

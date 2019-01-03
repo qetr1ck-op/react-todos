@@ -1,9 +1,15 @@
 import React from 'react'
 
-interface Props {
+import style from './todo-delete.css'
+
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   deleteDoneItems(): void
 }
 
-export function TodoDeleteDone({ deleteDoneItems}: Props) {
-  return <button onClick={deleteDoneItems}>Clear done</button>
+export function TodoDeleteDone({ deleteDoneItems }: Props) {
+  return (
+    <button className={style.delete} onClick={deleteDoneItems}>
+      Clear done
+    </button>
+  )
 }

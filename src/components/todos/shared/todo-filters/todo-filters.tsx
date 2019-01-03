@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Link } from 'react-router-dom'
+import style from './todo-filters.css'
+
+import { NavLink } from 'react-router-dom'
 import { TodoFilters as TodoFiltersEnum } from '../../enums'
 
 interface Props {
@@ -20,10 +22,10 @@ export function TodoFilters({ filters }: Props) {
         const { label, path } = routes[filter]
 
         return (
-          <Link key={label} to={path}>
+          <NavLink key={label} to={path} exact activeClassName={style.navActive}>
             {label}
             {'  '}
-          </Link>
+          </NavLink>
         )
       })}
     </div>

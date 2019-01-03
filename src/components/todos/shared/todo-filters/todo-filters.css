@@ -1,0 +1,12 @@
+a {
+  color: inherit;
+  margin: 3px;
+  padding: 3px 7px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+
+.navActive {
+  border: 1px solid #e6a8a8;
+}

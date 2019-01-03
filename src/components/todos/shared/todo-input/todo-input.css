@@ -10,5 +10,6 @@
 
 .input::placeholder {
   color: darkgrey;
-  opacity: .6;
+  opacity: 0.5;
+  font-weight: 100;
 }
