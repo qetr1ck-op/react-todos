@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import React from 'react'
 
 import style from './todo-check-all.css'
@@ -13,16 +12,10 @@ export const TodoCheckAll = ({ isAllChecked, checkAll }: Props) => (
     <input
       id="check-all"
       type="checkbox"
-      className={style.checkAll}
+      className={style.checkAllInput}
       checked={isAllChecked}
       onChange={checkAll}
     />
-    <label
-      htmlFor="check-all"
-      className={classNames({
-        [style.label]: true,
-        [style.checked]: isAllChecked,
-      })}
-    />
+    <label htmlFor="check-all" />
   </>
 )

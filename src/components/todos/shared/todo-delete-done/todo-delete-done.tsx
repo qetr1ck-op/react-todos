@@ -8,7 +8,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 export function TodoDeleteDone({ deleteDoneItems }: Props) {
   return (
-    <button className={style.delete} onClick={deleteDoneItems}>
+    <button className={style.deleteBtn} onClick={deleteDoneItems}>
       Clear done
     </button>
   )

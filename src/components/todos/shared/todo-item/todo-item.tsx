@@ -27,12 +27,12 @@ export class TodoItem extends React.PureComponent<Props, State> {
       <div className={style.item}>
         <input
           id={id}
-          className={style.checkbox}
+          className={style.statusToggle}
           type="checkbox"
           checked={done}
           onChange={this.changeStatus}
         />
-        <label className={style.checkboxLabel} htmlFor={id} />
+        <label className={style.statusLabel} htmlFor={id} />
         {isEditMode ? (
           <TodoInput
             value={value}
@@ -43,7 +43,7 @@ export class TodoItem extends React.PureComponent<Props, State> {
         ) : (
           <>
             <label className={style.itemLabel} onDoubleClick={this.enterUpdateMode}>{value}</label>
-            <button className={style.delete} onClick={this.deleteItem} />
+            <button className={style.deleteBtn} onClick={this.deleteItem} />
           </>
         )}
       </div>

@@ -7,16 +7,16 @@
   transition: color 0.4s;
 }
 
-.item:hover .delete {
+.item:hover .deleteBtn {
   display: block;
 }
 
-.checkbox {
+.statusToggle {
   position: absolute;
   display: none;
 }
 
-.checkbox + .checkboxLabel {
+.statusToggle + .statusLabel {
   width: 40px;
   height: 40px;
   position: absolute;
@@ -28,7 +28,7 @@
   cursor: pointer;
 }
 
-.checkbox:checked + .checkboxLabel {
+.statusToggle:checked + .statusLabel {
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iLTEwIC0xOCAxMDAgMTM1Ij48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmRkYWQ1IiBzdHJva2Utd2lkdGg9IjMiLz48cGF0aCBmaWxsPSIjNWRjMmFmIiBkPSJNNzIgMjVMNDIgNzEgMjcgNTZsLTQgNCAyMCAyMCAzNC01MnoiLz48L3N2Zz4=);
 }
 
@@ -37,7 +37,7 @@
   padding: 15px 15px 15px 60px;
 }
 
-.delete {
+.deleteBtn {
   display: none;
   position: absolute;
   top: 15px;
@@ -46,7 +46,7 @@
   cursor: pointer;
 }
 
-.delete:after {
+.deleteBtn:after {
   content: '×'
 }
 
