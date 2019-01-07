@@ -1,6 +1,5 @@
 import React from 'react'
-
-import style from './todo-check-all.css'
+import { Input, Label } from './todo-check-all.elements'
 
 interface Props {
   isAllChecked: boolean
@@ -9,13 +8,7 @@ interface Props {
 
 export const TodoCheckAll = ({ isAllChecked, checkAll }: Props) => (
   <>
-    <input
-      id="check-all"
-      type="checkbox"
-      className={style.checkAllInput}
-      checked={isAllChecked}
-      onChange={checkAll}
-    />
-    <label htmlFor="check-all" />
+    <Input id="check-all" type="checkbox" checked={isAllChecked} onChange={checkAll} />
+    <Label htmlFor="check-all" />
   </>
 )

@@ -5,6 +5,6 @@ interface Props {
   todos: Todo[]
 }
 
-export function TodoCount({ todos }: Props) {
-  return <div>{todos.length} items left</div>
-}
+export const TodoCount: React.FunctionComponent<Props> = ({ todos }) => (
+  <div>{todos.length} items left</div>
+)

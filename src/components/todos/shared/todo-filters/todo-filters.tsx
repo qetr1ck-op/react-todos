@@ -1,9 +1,7 @@
 import React from 'react'
 
-import style from './todo-filters.css'
-
-import { NavLink } from 'react-router-dom'
 import { TodoFilters as TodoFiltersEnum } from '../../enums'
+import { ActiveNavigationCss, NavigationLink } from './todo-filters.elements'
 
 interface Props {
   filters: TodoFiltersEnum[]
@@ -15,6 +13,8 @@ export const routes = {
   [TodoFiltersEnum.Done]: { path: `/${TodoFiltersEnum.Done}`, label: 'Done' },
 }
 
+
+
 export function TodoFilters({ filters }: Props) {
   return (
     <div>
@@ -22,10 +22,10 @@ export function TodoFilters({ filters }: Props) {
         const { label, path } = routes[filter]
 
         return (
-          <NavLink key={label} to={path} exact activeClassName={style.navActive}>
+          <NavigationLink key={label} to={path} exact activeStyle={ActiveNavigationCss}>
             {label}
             {'  '}
-          </NavLink>
+          </NavigationLink>
         )
       })}
     </div>

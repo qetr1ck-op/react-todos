@@ -7,9 +7,11 @@ import './root.css'
 export class Root extends React.Component {
   render() {
     return (
-      <Router>
-        <Todos />
-      </Router>
+      <div>
+        <Router>
+          <Todos />
+        </Router>
+      </div>
     )
   }
 }
