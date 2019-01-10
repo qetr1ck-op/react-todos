@@ -13,6 +13,8 @@
     "object-literal-sort-keys": false,
     "interface-name": false,
     "jsx-no-lambda": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "max-classes-per-file": false,
+    "no-empty": false
   }
 }

@@ -11,7 +11,6 @@ import { Todo } from './types'
 
 interface State {
   todos: Todo[]
-  todo: string
   filters: TodoFilters[]
   isAllChecked: boolean
 }
@@ -19,7 +18,6 @@ interface State {
 export class Todos extends React.Component<{}, State> {
   state = {
     todos: this.getItems(),
-    todo: '',
     filters: [TodoFilters.All, TodoFilters.Active, TodoFilters.Done],
     isAllChecked: false,
   }
@@ -29,17 +27,17 @@ export class Todos extends React.Component<{}, State> {
   }
 
   render() {
-    const { todos, todo, isAllChecked } = this.state
+    const { todos, isAllChecked } = this.state
 
     return (
       <section className={style.main}>
-        {/*<pre>{JSON.stringify(this.state, null, 2)}</pre>*/}
+        <pre>{JSON.stringify(this.state, null, 2)}</pre>
         <h1 className={style.title}>todos</h1>
         <div className={style.header}>
           {!!todos.length && (
             <TodoCheckAll isAllChecked={isAllChecked} checkAll={this.checkAllItems} />
           )}
-          <TodoInput value={todo} changeValue={this.addNewItem} />
+          <TodoInput value="" changeValue={this.addNewItem} />
         </div>
 
         <Switch>
