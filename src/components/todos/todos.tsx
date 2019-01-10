@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, RouteComponentProps, Switch } from 'react-router'
 
-import style from './todos.css';
+import { H1, HeaderBox, MainSection } from './todos.elements'
 
 import { Storage, TodoFilters } from './enums'
 import { uuid } from './services'
@@ -32,22 +32,22 @@ export class Todos extends React.Component<{}, State> {
     const { todos, todo, isAllChecked } = this.state
 
     return (
-      <section className={style.main}>
+      <MainSection>
         {/*<pre>{JSON.stringify(this.state, null, 2)}</pre>*/}
-        <h1 className={style.title}>todos</h1>
-        <div className={style.header}>
+        <H1>todos</H1>
+        <HeaderBox>
           {!!todos.length && (
             <TodoCheckAll isAllChecked={isAllChecked} checkAll={this.checkAllItems} />
           )}
           <TodoInput value={todo} changeValue={this.addNewItem} />
-        </div>
+        </HeaderBox>
 
         <Switch>
           <Route exact path="/" render={this.renderComponent(TodoFilters.All)} />
           <Route path="/active" render={this.renderComponent(TodoFilters.Active)} />
           <Route path="/done" render={this.renderComponent(TodoFilters.Done)} />
         </Switch>
-      </section>
+      </MainSection>
     )
   }
   private renderComponent = (filter: TodoFilters) => {

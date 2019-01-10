@@ -1,9 +1,8 @@
 import React from 'react'
 
-import style from './todo-item.css'
-
 import { Todo } from '../../types'
 import { TodoInput } from '../todo-input'
+import { DeleteBtn, ItemBox, ItemInfoBox, Checkbox } from './todo-items.elements'
 
 interface State {
   isEditMode: boolean
@@ -24,29 +23,28 @@ export class TodoItem extends React.PureComponent<Props, State> {
     const { done, value, id } = this.props.todo
     const { isEditMode } = this.state
     return (
-      <div className={style.item}>
-        <input
+      <ItemBox>
+        <Checkbox
           id={id}
-          className={style.statusToggle}
           type="checkbox"
           checked={done}
           onChange={this.changeStatus}
         />
-        <label className={style.statusLabel} htmlFor={id} />
+        <label htmlFor={id} />
         {isEditMode ? (
           <TodoInput
             value={value}
             changeValue={this.changeValue}
             exitEditMode={this.exitEditMode}
-            cssClasses={[style.editInput]}
+            showEditingMode
           />
         ) : (
           <>
-            <label className={style.itemLabel} onDoubleClick={this.enterUpdateMode}>{value}</label>
-            <button className={style.deleteBtn} onClick={this.deleteItem} />
+            <ItemInfoBox onDoubleClick={this.enterUpdateMode} done={done}>{value}</ItemInfoBox>
+            <DeleteBtn onClick={this.deleteItem} />
           </>
         )}
-      </div>
+      </ItemBox>
     )
   }
 

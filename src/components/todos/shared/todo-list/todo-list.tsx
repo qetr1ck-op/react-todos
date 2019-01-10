@@ -1,6 +1,6 @@
 import React from 'react'
 
-import style from './todo-list.css'
+import { FooterBox, List } from './todo-list.elements'
 
 import { TodoFilters as TodoFiltersEnum } from '../../enums'
 import { Todo } from '../../types'
@@ -34,7 +34,7 @@ export function TodoList({
     <div>
       {!!totalTodos && (
         <>
-          <ul className={style.list}>
+          <List>
             {todos.map((todo) => (
               <li key={todo.id}>
                 <TodoItem
@@ -45,14 +45,14 @@ export function TodoList({
                 />
               </li>
             ))}
-          </ul>
-          <div className={style.footer}>
+          </List>
+          <FooterBox>
             <TodoCount todos={todos} />
             <TodoFilters filters={filters} />
             <div style={{ visibility: hasDoneItems ? 'visible' : 'hidden' }}>
               <TodoDeleteDone deleteDoneItems={deleteDoneItems} />
             </div>
-          </div>
+          </FooterBox>
         </>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { TodoFilters as TodoFiltersEnum } from '../../enums'
-import { ActiveNavigationCss, NavigationLink } from './todo-filters.elements'
+import { activeLinkCss, Link } from './todo-filters.elements'
 
 interface Props {
   filters: TodoFiltersEnum[]
@@ -13,21 +13,17 @@ export const routes = {
   [TodoFiltersEnum.Done]: { path: `/${TodoFiltersEnum.Done}`, label: 'Done' },
 }
 
+export const TodoFilters: React.FunctionComponent<Props> = ({ filters }) => (
+  <div>
+    {filters.map((filter) => {
+      const { label, path } = routes[filter]
 
-
-export function TodoFilters({ filters }: Props) {
-  return (
-    <div>
-      {filters.map((filter) => {
-        const { label, path } = routes[filter]
-
-        return (
-          <NavigationLink key={label} to={path} exact activeStyle={ActiveNavigationCss}>
-            {label}
-            {'  '}
-          </NavigationLink>
-        )
-      })}
-    </div>
-  )
-}
+      return (
+        <Link key={label} to={path} exact activeStyle={activeLinkCss}>
+          {label}
+          {'  '}
+        </Link>
+      )
+    })}
+  </div>
+)

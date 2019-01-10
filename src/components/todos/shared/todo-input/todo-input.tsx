@@ -1,14 +1,13 @@
-import classNames from 'classnames'
 import React from 'react'
 
-import style from './todo-input.css';
+import { Input } from './todo-input.elements'
 
 interface State {
   value: string
 }
 interface Props {
   value: string
-  cssClasses?: string[]
+  showEditingMode?: boolean
   changeValue?(prop: { value: string }): void
   exitEditMode?(prop: { value: string }): void
 }
@@ -38,14 +37,14 @@ export class TodoInput extends React.PureComponent<Props, State> {
   render() {
     const { value } = this.state
     return (
-      <input
+      <Input
         type="text"
         placeholder="What needs to be done?"
-        className={classNames([style.input, this.props.cssClasses])}
         value={value}
         ref={this.elRef}
         onChange={this.change}
         onKeyPress={this.keyPress}
+        showEditingMode={this.props.showEditingMode}
       />
     )
   }
