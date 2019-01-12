@@ -1,7 +1,7 @@
 import { Todo } from '../types'
 
 interface Action {
-  
+  type: Actions
 }
 
 export enum Actions {
@@ -9,30 +9,31 @@ export enum Actions {
   DeleteSingle = 'DeleteSinge',
   DeleteDone = 'DeleteAll',
   Edit = 'Remove',
-  ToggleStatusAll = 'ToggleStatusAll'
+  ToggleDoneStatusAll = 'ToggleDoneStatusAll',
 }
 
-export class Add {
+export class Add implements Action {
   readonly type = Actions.Add
   constructor(public payload: Todo) {}
 }
 
-export class DeleteSingle {
+export class DeleteOne implements Action {
   readonly type = Actions.DeleteSingle
   constructor(public payload: string) {}
 }
 
-export class DeleteAll {
+export class DeleteAll implements Action {
   readonly type = Actions.DeleteDone
 }
 
-export class Edit {
+export class Edit implements Action {
   readonly type = Actions.Edit
   constructor(public payload: Partial<Todo>) {}
 }
 
-export class ToggleStatusAll {
-  readonly type = Actions.ToggleStatusAll
+export class ToggleDoneStatusAll implements Action {
+  readonly type = Actions.ToggleDoneStatusAll
+  constructor(public payload: boolean) {}
 }
 
-export type TodosAction = Add | DeleteSingle |DeleteAll | Edit | ToggleStatusAll
+export type TodosActions = Add | DeleteOne | DeleteAll | Edit | ToggleDoneStatusAll

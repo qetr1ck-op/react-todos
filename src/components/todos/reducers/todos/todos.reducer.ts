@@ -1,19 +1,19 @@
 // import { TodoFilters } from '../enums'
-import { Actions, TodosAction } from '../actions'
-import { uuid } from '../services/uuid'
-import { Todo } from '../types'
+import { Actions, TodosActions } from '../../actions'
+import { uuid } from '../../services/uuid'
+import { Todo } from '../../types'
 
-interface TodosState {
+export interface TodosState {
   todos: Todo[]
-  // filters: TodoFilters[]
   // isAllChecked: boolean
+  // filters: TodoFilters[]
 }
 
 const initialState: TodosState = {
   todos: [{ value: 'Learn Redux', done: false, id: uuid() }],
 }
 
-const TodosReducer = (state = initialState, action: TodosAction): TodosState => {
+export const TodosReducer = (state = initialState, action: TodosActions): TodosState => {
   switch (action.type) {
     case Actions.Add: {
       return {
@@ -38,6 +38,11 @@ const TodosReducer = (state = initialState, action: TodosAction): TodosState => 
     case Actions.DeleteDone: {
       return {
         todos: state.todos.filter(todo => !todo.done)
+      }
+    }
+    case Actions.ToggleDoneStatusAll: {
+      return {
+        todos: state.todos.map(todo => ({...todo, done: action.payload}))
       }
     }
 
