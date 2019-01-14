@@ -1,26 +1,23 @@
-// import { TodoFilters } from '../enums'
-import { Actions, TodosActions } from '../../actions'
+import { Actions, ActionType } from '../../actions'
 import { uuid } from '../../services/uuid'
 import { Todo } from '../../types'
 
 export interface TodosState {
   todos: Todo[]
-  // isAllChecked: boolean
-  // filters: TodoFilters[]
 }
 
 const initialState: TodosState = {
   todos: [{ value: 'Learn Redux', done: false, id: uuid() }],
 }
 
-export const TodosReducer = (state = initialState, action: TodosActions): TodosState => {
+export const TodosReducer = (state = initialState, action: Actions): TodosState => {
   switch (action.type) {
-    case Actions.Add: {
+    case ActionType.Add: {
       return {
-        todos: [...state.todos, action.payload],
+        todos: [...state.todos, { value: action.payload.value, id: uuid(), done: false }],
       }
     }
-    case Actions.Edit: {
+    case ActionType.Edit: {
       return {
         todos: state.todos.map((todo) => {
           if (todo.id === action.payload.id) {
@@ -30,19 +27,19 @@ export const TodosReducer = (state = initialState, action: TodosActions): TodosS
         }),
       }
     }
-    case Actions.DeleteSingle: {
+    case ActionType.DeleteOne: {
       return {
-        todos: state.todos.filter(todo => todo.id !== action.payload)
+        todos: state.todos.filter((todo) => todo.id !== action.payload),
       }
     }
-    case Actions.DeleteDone: {
+    case ActionType.DeleteAll: {
       return {
-        todos: state.todos.filter(todo => !todo.done)
+        todos: state.todos.filter((todo) => !todo.done),
       }
     }
-    case Actions.ToggleDoneStatusAll: {
+    case ActionType.ToggleStatusAll: {
       return {
-        todos: state.todos.map(todo => ({...todo, done: action.payload}))
+        todos: state.todos.map((todo) => ({ ...todo, done: action.payload.done })),
       }
     }
 

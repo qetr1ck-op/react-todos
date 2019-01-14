@@ -1,39 +1,37 @@
+import { Action } from 'redux'
+
 import { Todo } from '../types'
 
-interface Action {
-  type: Actions
-}
-
-export enum Actions {
+export enum ActionType {
   Add = 'Add',
-  DeleteSingle = 'DeleteSinge',
-  DeleteDone = 'DeleteAll',
-  Edit = 'Remove',
-  ToggleDoneStatusAll = 'ToggleDoneStatusAll',
+  DeleteOne = 'DeleteSinge',
+  DeleteAll = 'DeleteAll',
+  Edit = 'Edit',
+  ToggleStatusAll = 'ToggleStatusAll',
 }
 
 export class Add implements Action {
-  readonly type = Actions.Add
-  constructor(public payload: Todo) {}
+  readonly type = ActionType.Add
+  constructor(public payload: { value: string }) {}
 }
 
 export class DeleteOne implements Action {
-  readonly type = Actions.DeleteSingle
+  readonly type = ActionType.DeleteOne
   constructor(public payload: string) {}
 }
 
 export class DeleteAll implements Action {
-  readonly type = Actions.DeleteDone
+  readonly type = ActionType.DeleteAll
 }
 
 export class Edit implements Action {
-  readonly type = Actions.Edit
+  readonly type = ActionType.Edit
   constructor(public payload: Partial<Todo>) {}
 }
 
 export class ToggleDoneStatusAll implements Action {
-  readonly type = Actions.ToggleDoneStatusAll
-  constructor(public payload: boolean) {}
+  readonly type = ActionType.ToggleStatusAll
+  constructor(public payload: { done: boolean }) {}
 }
 
-export type TodosActions = Add | DeleteOne | DeleteAll | Edit | ToggleDoneStatusAll
+export type Actions = Add | DeleteOne | DeleteAll | Edit | ToggleDoneStatusAll
