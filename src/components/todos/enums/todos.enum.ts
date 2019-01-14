@@ -1,4 +1,4 @@
-export enum TodoFilters {
+export enum TodoFilter {
   All = 'all',
   Active = 'active',
   Done = 'done',

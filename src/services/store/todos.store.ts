@@ -1,13 +1,13 @@
 import throttle from 'lodash/throttle'
 import { Action, applyMiddleware, createStore, Store } from 'redux'
 
-import { TodosReducer } from '../../components/todos'
+import { todosReducer } from '../../components/todos'
 import { loadState, saveState } from '../local-storage'
 
 const initialState = loadState()
 
 function configureStore(initialState?: object) {
-  return createStore(TodosReducer, initialState, applyMiddleware(actionToPlainObject))
+  return createStore(todosReducer, initialState, applyMiddleware(actionToPlainObject))
 }
 
 export const store = configureStore(initialState)

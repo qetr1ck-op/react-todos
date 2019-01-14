@@ -1,29 +1,33 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Route, RouteComponentProps, Switch } from 'react-router'
+import { RouteComponentProps } from 'react-router'
 import { Dispatch } from 'redux'
 import * as TodoActions from './actions'
 
-import { TodoFilters } from './enums'
-import { TodosState } from './reducers/todos'
-// import { uuid } from './services'
+import { TodoFilter } from './enums'
+import { TodosState } from './reducers'
+import { filterTodosSelect } from './selectors'
 import { TodoCheckAll, TodoInput } from './shared'
 import { TodoList } from './shared/todo-list'
-
 import style from './todos.css'
 import { Todo } from './types'
+
+// import { TodoList } from './shared/todo-list'
 
 interface State {
   isAllChecked: boolean
 }
 
-interface StateProps {
+interface StateProps extends RouteComponentProps<{ filter?: string }> {
   todos: Todo[]
+  filter: TodoFilter
 }
 
 interface DispatchProps {
-  toggleDoneStatusAll(done: boolean): void
-  addTodo(value: string): void
+  // toggleDoneStatusAll(done: boolean): void
+  // addTodo(value: string): void
+  // changeFilter(filter: TodoFilter): void
+  dispatch: Dispatch<TodoActions.TodoActions>
 }
 
 type Props = StateProps & DispatchProps
@@ -32,7 +36,6 @@ export class Todos extends React.Component<Props, State> {
   state = {
     isAllChecked: false,
   }
-  private filters = [TodoFilters.All, TodoFilters.Active, TodoFilters.Done]
 
   render() {
     const { isAllChecked } = this.state
@@ -49,19 +52,24 @@ export class Todos extends React.Component<Props, State> {
           <TodoInput value="" changeValue={this.addNewItem} />
         </div>
 
-        <Switch>
-          <Route exact path="/" render={this.renderComponent(TodoFilters.All)} />
-          <Route path="/active" render={this.renderComponent(TodoFilters.Active)} />
-          <Route path="/done" render={this.renderComponent(TodoFilters.Done)} />
-        </Switch>
+        <TodoList
+          todos={this.props.todos}
+          totalTodos={this.props.todos.length}
+          statusChange={() => {}}
+          valueChange={() => {}}
+          deleteItem={() => {}}
+          deleteDoneItems={() => {}}
+          hasDoneItems={this.hasDoneItems()}
+        />
       </section>
     )
   }
-  private renderComponent = (filter: TodoFilters) => {
+  /*private renderComponent = (filter: TodoFilter) => {
+    // this.props.changeFilter(filter)
     return (props: RouteComponentProps) => (
       <TodoList
         {...props}
-        todos={this.props.todos}
+        todos={filterTodosSelect(this.props.todos, filter)}
         totalTodos={this.props.todos.length}
         filters={this.filters}
         statusChange={() => {}}
@@ -71,7 +79,7 @@ export class Todos extends React.Component<Props, State> {
         hasDoneItems={this.hasDoneItems()}
       />
     )
-  }
+  }*/
   /*private get uuid(): string {
     return uuid()
   }*/
@@ -79,7 +87,7 @@ export class Todos extends React.Component<Props, State> {
   private hasDoneItems = (): boolean => this.props.todos.some((todo) => todo.done)
 
   private addNewItem = ({ value }: Todo) => {
-    this.props.addTodo(value)
+    this.props.dispatch(new TodoActions.Add({ value }))
   }
 
   // TODO: to store.dispatch
@@ -116,13 +124,13 @@ export class Todos extends React.Component<Props, State> {
   }*/
 
   // TODO: integrate with store and route
-  /*private applyFilter(filter: TodoFilters): Todo[] {
+  /*private applyFilter(filter: TodoFilter): Todo[] {
     const { todos } = this.props
 
-    if (filter === TodoFilters.Active) {
+    if (filter === TodoFilter.Active) {
       return todos.filter((todo: Todo) => !todo.done)
     }
-    if (filter === TodoFilters.Done) {
+    if (filter === TodoFilter.Done) {
       return todos.filter((todo: Todo) => todo.done)
     }
     return todos
@@ -134,7 +142,7 @@ export class Todos extends React.Component<Props, State> {
         isAllChecked: !state.isAllChecked,
       }
     })
-    this.props.toggleDoneStatusAll(!this.state.isAllChecked)
+    this.props.dispatch(new TodoActions.ToggleDoneStatusAll({ done: !this.state.isAllChecked}))
   }
 
   // TODO: to store.dispatch
@@ -155,19 +163,23 @@ export class Todos extends React.Component<Props, State> {
   }*/
 }
 
-function mapStateToProps(state: TodosState): StateProps {
-  return { todos: state.todos }
+function mapStateToProps(state: TodosState, props: Props): any {
+  return { todos: filterTodosSelect(state.todos, props.match.params.filter as TodoFilter || TodoFilter.All) }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<TodoActions.Actions>): DispatchProps {
+function mapDispatchToProps(dispatch: Dispatch<TodoActions.TodoActions>): DispatchProps {
   return {
-    toggleDoneStatusAll(done: boolean) {
-      const a = new TodoActions.ToggleDoneStatusAll({done})
+    dispatch
+    /*toggleDoneStatusAll(done: boolean) {
+      const a = new TodoActions.ToggleDoneStatusAll({ done })
       dispatch(a)
     },
     addTodo(value: string) {
-      dispatch(new TodoActions.Add({value}))
-    }
+      dispatch(new TodoActions.Add({ value }))
+    },
+    changeFilter(filter: TodoFilter) {
+      dispatch(new TodoActions.ChangeFilter({ value: filter }))
+    },*/
   }
 }
 

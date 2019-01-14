@@ -1,37 +1,44 @@
 import { Action } from 'redux'
+import { TodoFilter } from '../enums'
 
 import { Todo } from '../types'
 
-export enum ActionType {
+export enum TodoActionType {
   Add = 'Add',
   DeleteOne = 'DeleteSinge',
   DeleteAll = 'DeleteAll',
   Edit = 'Edit',
   ToggleStatusAll = 'ToggleStatusAll',
+  FilterChange = 'FilterChange',
 }
 
 export class Add implements Action {
-  readonly type = ActionType.Add
+  readonly type = TodoActionType.Add
   constructor(public payload: { value: string }) {}
 }
 
 export class DeleteOne implements Action {
-  readonly type = ActionType.DeleteOne
+  readonly type = TodoActionType.DeleteOne
   constructor(public payload: string) {}
 }
 
 export class DeleteAll implements Action {
-  readonly type = ActionType.DeleteAll
+  readonly type = TodoActionType.DeleteAll
 }
 
 export class Edit implements Action {
-  readonly type = ActionType.Edit
+  readonly type = TodoActionType.Edit
   constructor(public payload: Partial<Todo>) {}
 }
 
 export class ToggleDoneStatusAll implements Action {
-  readonly type = ActionType.ToggleStatusAll
+  readonly type = TodoActionType.ToggleStatusAll
   constructor(public payload: { done: boolean }) {}
 }
 
-export type Actions = Add | DeleteOne | DeleteAll | Edit | ToggleDoneStatusAll
+export class ChangeFilter implements Action {
+  readonly type = TodoActionType.FilterChange
+  constructor(public payload: { value: TodoFilter }) {}
+}
+
+export type TodoActions = Add | DeleteOne | DeleteAll | Edit | ToggleDoneStatusAll | ChangeFilter

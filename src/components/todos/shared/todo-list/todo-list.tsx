@@ -2,7 +2,6 @@ import React from 'react'
 
 import style from './todo-list.css'
 
-import { TodoFilters as TodoFiltersEnum } from '../../enums'
 import { Todo } from '../../types'
 import { TodoCount } from '../todo-count'
 import { TodoDeleteDone } from '../todo-delete-done'
@@ -12,7 +11,6 @@ import { TodoItem } from '../todo-item'
 interface Props {
   todos: Todo[]
   totalTodos: number
-  filters: TodoFiltersEnum[]
   hasDoneItems: boolean
   statusChange(changes: { id: string }): void
   deleteItem(changes: { id: string }): void
@@ -23,7 +21,6 @@ interface Props {
 export function TodoList({
   todos,
   totalTodos,
-  filters,
   deleteItem,
   statusChange,
   valueChange,
@@ -48,7 +45,7 @@ export function TodoList({
           </ul>
           <div className={style.footer}>
             <TodoCount todos={todos} />
-            <TodoFilters filters={filters} />
+            <TodoFilters />
             <div style={{ visibility: hasDoneItems ? 'visible' : 'hidden' }}>
               <TodoDeleteDone deleteDoneItems={deleteDoneItems} />
             </div>

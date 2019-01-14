@@ -3,19 +3,17 @@ import React from 'react'
 import style from './todo-filters.css'
 
 import { NavLink } from 'react-router-dom'
-import { TodoFilters as TodoFiltersEnum } from '../../enums'
-
-interface Props {
-  filters: TodoFiltersEnum[]
-}
+import { TodoFilter } from '../../enums'
 
 export const routes = {
-  [TodoFiltersEnum.All]: { path: '/', label: 'All' },
-  [TodoFiltersEnum.Active]: { path: `/${TodoFiltersEnum.Active}`, label: 'Active' },
-  [TodoFiltersEnum.Done]: { path: `/${TodoFiltersEnum.Done}`, label: 'Done' },
+  [TodoFilter.All]: { path: '/', label: 'All' },
+  [TodoFilter.Active]: { path: `/${TodoFilter.Active}`, label: 'Active' },
+  [TodoFilter.Done]: { path: `/${TodoFilter.Done}`, label: 'Done' },
 }
 
-export function TodoFilters({ filters }: Props) {
+const filters = [TodoFilter.All, TodoFilter.Active, TodoFilter.Done]
+
+export function TodoFilters() {
   return (
     <div>
       {filters.map((filter) => {
