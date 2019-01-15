@@ -1,11 +1,7 @@
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "linterOptions": {
-    "exclude": [
-      "config/**/*.js",
-      "node_modules/**/*.ts",
-      "coverage/lcov-report/*.js"
-    ]
+    "exclude": ["config/**/*.js", "node_modules/**/*.ts", "coverage/lcov-report/*.js"]
   },
   "rules": {
     "jsx-boolean-value": false,
@@ -15,6 +11,23 @@
     "jsx-no-lambda": false,
     "no-shadowed-variable": false,
     "max-classes-per-file": false,
-    "no-empty": false
+    "no-empty": false,
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "public-static-field",
+          "public-instance-field",
+          "public-constructor",
+          "public-instance-method",
+          "private-static-field",
+          "private-instance-field",
+          "private-constructor",
+
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
+    ]
   }
 }

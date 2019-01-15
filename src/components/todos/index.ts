@@ -1,2 +1,2 @@
 export * from './todos'
-export * from './reducers'
+export * from './store/reducers/todo'

@@ -1,6 +1,6 @@
 const ROOT_STATE = 'ROOT_STATE'
 
-export const loadState = (): undefined | object => {
+export const loadState = (): any => {
   try {
     const serializedState = localStorage.getItem(ROOT_STATE)
     if (serializedState === null) {

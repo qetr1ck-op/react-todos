@@ -1,7 +1,7 @@
 import { Action } from 'redux'
-import { TodoFilter } from '../enums'
+import { TodoFilter } from '../../../enums'
 
-import { Todo } from '../types'
+import { Todo } from '../../../types'
 
 export enum TodoActionType {
   Add = 'Add',
@@ -19,10 +19,10 @@ export class Add implements Action {
 
 export class DeleteOne implements Action {
   readonly type = TodoActionType.DeleteOne
-  constructor(public payload: string) {}
+  constructor(public payload: { id: string }) {}
 }
 
-export class DeleteAll implements Action {
+export class DeleteAllDone implements Action {
   readonly type = TodoActionType.DeleteAll
 }
 
@@ -38,7 +38,13 @@ export class ToggleDoneStatusAll implements Action {
 
 export class ChangeFilter implements Action {
   readonly type = TodoActionType.FilterChange
-  constructor(public payload: { value: TodoFilter }) {}
+  constructor(public payload: { filter: TodoFilter }) {}
 }
 
-export type TodoActions = Add | DeleteOne | DeleteAll | Edit | ToggleDoneStatusAll | ChangeFilter
+export type TodoActions =
+  | Add
+  | DeleteOne
+  | DeleteAllDone
+  | Edit
+  | ToggleDoneStatusAll
+  | ChangeFilter

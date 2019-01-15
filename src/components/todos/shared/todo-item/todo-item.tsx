@@ -1,4 +1,8 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
+
+import * as fromTodoActions from '../../store/actions/todo'
 
 import style from './todo-item.css'
 
@@ -10,12 +14,13 @@ interface State {
 }
 interface Props {
   todo: Todo
-  statusChange(changes: { id: string }): void
-  valueChange(changes: { id: string; value: string }): void
-  deleteItem(changes: { id: string }): void
 }
 
-export class TodoItem extends React.PureComponent<Props, State> {
+interface DispatchProps {
+  dispatch: Dispatch<fromTodoActions.TodoActions>
+}
+
+class TodoItem extends React.PureComponent<Props & DispatchProps, State> {
   state = {
     isEditMode: false,
   }
@@ -42,7 +47,9 @@ export class TodoItem extends React.PureComponent<Props, State> {
           />
         ) : (
           <>
-            <label className={style.itemLabel} onDoubleClick={this.enterUpdateMode}>{value}</label>
+            <label className={style.itemLabel} onDoubleClick={this.enterUpdateMode}>
+              {value}
+            </label>
             <button className={style.deleteBtn} onClick={this.deleteItem} />
           </>
         )}
@@ -50,20 +57,24 @@ export class TodoItem extends React.PureComponent<Props, State> {
     )
   }
 
+  private dispatch = this.props.dispatch
+
   private exitEditMode = ({ value }) => {
     const { id } = this.props.todo
 
     this.setState({ isEditMode: false })
-    this.props.valueChange({ id, value })
+    this.dispatch(new fromTodoActions.Edit({ id, value }))
   }
 
   private changeValue = ({ value }) => {
     this.setState({ isEditMode: false })
-    this.props.valueChange({ id: this.props.todo.id, value })
+    this.dispatch(new fromTodoActions.Edit({ id: this.props.todo.id, value }))
   }
 
   private changeStatus = () => {
-    this.props.statusChange({ id: this.props.todo.id! })
+    const { id, done } = this.props.todo
+
+    this.dispatch(new fromTodoActions.Edit({ id, done: !done }))
   }
 
   private enterUpdateMode = () => {
@@ -71,6 +82,8 @@ export class TodoItem extends React.PureComponent<Props, State> {
   }
 
   private deleteItem = () => {
-    this.props.deleteItem({ id: this.props.todo.id })
+    this.dispatch(new fromTodoActions.DeleteOne({ id: this.props.todo.id }))
   }
 }
+
+export const TodoItemConnected = connect()(TodoItem)

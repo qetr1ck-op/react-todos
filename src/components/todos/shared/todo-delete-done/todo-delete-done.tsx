@@ -1,15 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
+
+import * as fromTodoActions from '../../store'
 
 import style from './todo-delete.css'
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  deleteDoneItems(): void
+interface DispatchProps {
+  dispatch: Dispatch<fromTodoActions.TodoActions>
 }
 
-export function TodoDeleteDone({ deleteDoneItems }: Props) {
+const TodoDeleteDone: React.FunctionComponent<DispatchProps> = ({ dispatch }) => {
   return (
-    <button className={style.deleteBtn} onClick={deleteDoneItems}>
+    <button
+      className={style.deleteBtn}
+      onClick={() => dispatch(new fromTodoActions.DeleteAllDone())}>
       Clear done
     </button>
   )
 }
+
+export const TodoDeleteDoneConnected = connect()(TodoDeleteDone)

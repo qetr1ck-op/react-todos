@@ -1,26 +1,45 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "build/dist",
-    "module": "esnext",
-    "target": "es5",
-    "lib": ["es6", "dom"],
-    "sourceMap": true,
-    "allowJs": true,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "rootDir": "src",
+    "baseUrl": "./", // enables project relative paths config
+    "paths": { // define paths mappings
+      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
+      // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
+    },
+    "outDir": "dist/", // target for compiled files
+    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
+    "esModuleInterop": true,
+    "allowJs": true, // include js files
+    "checkJs": true, // typecheck js files
+    "declaration": false, // don't emit declarations
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "importHelpers": true, // importing helper functions from tslib
+    "noEmitHelpers": true, // disable emitting inline helper functions
+    "jsx": "react", // process JSX
+    "lib": [
+      "dom",
+      "es2018"
+    ],
+    "target": "es5", // "es2015" for ES6+ engines
+    "module": "commonjs", // "es2015" for tree-shaking
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "rootDir": "src",
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": false,
-    "importHelpers": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true
   },
+  "include": [
+    "src/**/*",
+    "extenstions.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "build",

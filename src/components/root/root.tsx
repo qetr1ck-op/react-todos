@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Provider as StoreProvider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { store } from '../../services/store'
+import { store } from '../../store'
 
-import { TodosContainer } from '../todos'
+import { TodosConnected } from '../todos'
 import './root.css'
 
 export class Root extends React.Component {
@@ -11,7 +11,7 @@ export class Root extends React.Component {
     return (
       <StoreProvider store={store}>
         <Router>
-          <Route exact path="/:filter?" component={TodosContainer}/>
+          <Route exact path="/:filter?" component={TodosConnected}/>
           {/*<TodosContainer />*/}
         </Router>
       </StoreProvider>

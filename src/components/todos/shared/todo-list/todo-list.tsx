@@ -4,29 +4,17 @@ import style from './todo-list.css'
 
 import { Todo } from '../../types'
 import { TodoCount } from '../todo-count'
-import { TodoDeleteDone } from '../todo-delete-done'
+import { TodoDeleteDoneConnected } from '../todo-delete-done'
 import { TodoFilters } from '../todo-filters'
-import { TodoItem } from '../todo-item'
+import { TodoItemConnected } from '../todo-item'
 
 interface Props {
   todos: Todo[]
   totalTodos: number
   hasDoneItems: boolean
-  statusChange(changes: { id: string }): void
-  deleteItem(changes: { id: string }): void
-  valueChange(changes: { id: string; value: string }): void
-  deleteDoneItems(): void
 }
 
-export function TodoList({
-  todos,
-  totalTodos,
-  deleteItem,
-  statusChange,
-  valueChange,
-  deleteDoneItems,
-  hasDoneItems,
-}: Props) {
+export function TodoList({ todos, totalTodos, hasDoneItems }: Props) {
   return (
     <div>
       {!!totalTodos && (
@@ -34,12 +22,7 @@ export function TodoList({
           <ul className={style.list}>
             {todos.map((todo) => (
               <li key={todo.id}>
-                <TodoItem
-                  todo={todo}
-                  statusChange={statusChange}
-                  valueChange={valueChange}
-                  deleteItem={deleteItem}
-                />
+                <TodoItemConnected todo={todo} />
               </li>
             ))}
           </ul>
@@ -47,7 +30,7 @@ export function TodoList({
             <TodoCount todos={todos} />
             <TodoFilters />
             <div style={{ visibility: hasDoneItems ? 'visible' : 'hidden' }}>
-              <TodoDeleteDone deleteDoneItems={deleteDoneItems} />
+              <TodoDeleteDoneConnected />
             </div>
           </div>
         </>
