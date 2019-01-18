@@ -1,6 +1,7 @@
 import throttle from 'lodash/throttle'
 import { applyMiddleware, createStore } from 'redux'
 import loggerMiddleware from 'redux-logger'
+import promiseMiddleware from 'redux-promise-middleware'
 
 import { todoReducer, TodoState } from '../../components/todos'
 import { loadState, saveState } from '../../services/local-storage'
@@ -17,7 +18,11 @@ const combineReducer = (state: RootState, action): RootState => {
   }
 }
 const configureStore = (initialState?: object) =>
-  createStore(combineReducer, initialState, applyMiddleware(actionToPlainObject, loggerMiddleware))
+  createStore(
+    combineReducer,
+    initialState,
+    applyMiddleware(actionToPlainObject, loggerMiddleware, promiseMiddleware()),
+  )
 
 export const store = configureStore(initialState)
 

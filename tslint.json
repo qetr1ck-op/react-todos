@@ -17,13 +17,12 @@
       {
         "order": [
           "public-static-field",
+          "private-instance-field",
           "public-instance-field",
           "public-constructor",
           "public-instance-method",
           "private-static-field",
-          "private-instance-field",
           "private-constructor",
-
           "protected-instance-method",
           "private-instance-method"
         ]

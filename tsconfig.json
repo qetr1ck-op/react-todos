@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./", // enables project relative paths config
     "paths": { // define paths mappings
-      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
+//      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
       // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
     },
     "outDir": "dist/", // target for compiled files

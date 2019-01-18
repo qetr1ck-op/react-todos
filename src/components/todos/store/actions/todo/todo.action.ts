@@ -1,6 +1,9 @@
 import { Action } from 'redux'
-import { TodoFilter } from '../../../enums'
 
+import { createAsyncAction } from 'redux-promise-middleware-actions';
+
+import { TodoFilter } from '../../../enums'
+import { TodosApiService } from '../../../services/api'
 import { Todo } from '../../../types'
 
 export enum TodoActionType {
@@ -10,6 +13,7 @@ export enum TodoActionType {
   Edit = 'Edit',
   ToggleStatusAll = 'ToggleStatusAll',
   FilterChange = 'FilterChange',
+  Load = 'Load'
 }
 
 export class Add implements Action {
@@ -41,6 +45,20 @@ export class ChangeFilter implements Action {
   constructor(public payload: { filter: TodoFilter }) {}
 }
 
+export const loadAction = createAsyncAction(TodoActionType.Load, () => {
+  const api = new TodosApiService()
+  return api.getAll()
+})
+
+export class Test implements Action {
+  readonly type = TodoActionType.Load
+  payload: any
+  constructor() {
+    // const api = new TodosApiService()
+    this.payload = Promise.reject(1)
+  }
+}
+
 export type TodoActions =
   | Add
   | DeleteOne
@@ -48,3 +66,4 @@ export type TodoActions =
   | Edit
   | ToggleDoneStatusAll
   | ChangeFilter
+  | Test

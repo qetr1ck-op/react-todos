@@ -33,8 +33,14 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & RouteComponentProps<RouterProps>
 
 class Todos extends React.PureComponent<Props, State> {
+  private dispatch = this.props.dispatch
   state = {
     isAllChecked: false,
+  }
+
+
+  componentDidMount(): void {
+    this.dispatch(new fromTodoActions.Test)
   }
 
   render() {
@@ -64,7 +70,6 @@ class Todos extends React.PureComponent<Props, State> {
     )
   }
 
-  private dispatch = this.props.dispatch
 
   private checkAllItems = () => {
     this.setState((state: State) => {
