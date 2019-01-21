@@ -27,4 +27,6 @@ export function uuid(
           uuid, // random hex digits
         )
 }
+
+export const uuidByDate = () => `${Date.now()}-${uuid()}`
 /* tslint:enable */

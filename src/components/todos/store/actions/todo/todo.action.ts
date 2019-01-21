@@ -1,24 +1,42 @@
 import { Action } from 'redux'
 
-import { createAsyncAction } from 'redux-promise-middleware-actions';
-
 import { TodoFilter } from '../../../enums'
 import { TodosApiService } from '../../../services/api'
+import { uuidByDate } from '../../../services/uuid'
 import { Todo } from '../../../types'
 
 export enum TodoActionType {
-  Add = 'Add',
-  DeleteOne = 'DeleteSinge',
-  DeleteAll = 'DeleteAll',
-  Edit = 'Edit',
-  ToggleStatusAll = 'ToggleStatusAll',
-  FilterChange = 'FilterChange',
-  Load = 'Load'
+  Add = '[TODO] ADD',
+  AddLoading = '[TODO] ADD_PENDING',
+  AddSuccess = '[TODO] ADD_FULFILLED',
+  DeleteOne = '[TODO] DELETE_SINGLE',
+  DeleteAll = '[TODO] DELETE_ALL',
+  Update = '[TODO] UPDATE',
+  UpdateSuccess = '[TODO] UPDATE_FULFILLED',
+  ToggleStatusAll = '[TODO] TOGGLE_STATUS_ALL',
+  FilterChange = '[TODO] FILTER_CHANGE',
+  Get = '[TODO] GET',
+  GetLoading = '[TODO] GET_PENDING',
+  GetSuccess = '[TODO] GET_FULFILLED',
 }
+
+const apiService = new TodosApiService()
 
 export class Add implements Action {
   readonly type = TodoActionType.Add
-  constructor(public payload: { value: string }) {}
+  payload: any
+  constructor(data: { value: string }) {
+    this.payload = apiService.addSingle({ value: data.value, id: uuidByDate(), done: false })
+  }
+}
+
+export class AddLoading implements Action {
+  readonly type = TodoActionType.AddLoading
+}
+
+export class AddSuccess implements Action {
+  readonly type = TodoActionType.AddSuccess
+  payload: Todo
 }
 
 export class DeleteOne implements Action {
@@ -30,9 +48,28 @@ export class DeleteAllDone implements Action {
   readonly type = TodoActionType.DeleteAll
 }
 
+/*
+[] edit -> update
+[] optimistic update?
+[] thunk: update -> 
+1. dispatch(UpdateSuccess)
+2. dispatch(UpdateError)
+*/
 export class Edit implements Action {
-  readonly type = TodoActionType.Edit
-  constructor(public payload: Partial<Todo>) {}
+  readonly type = TodoActionType.Update
+  payload: Promise<Todo[]>
+  constructor(payload: Partial<Todo>) {
+    this.payload = apiService.editSingle(payload)
+  }
+}
+
+export const EditThunk = (payload: Partial<Todo>) => (dispatch, getState) => {
+  dispatch
+}
+
+export class EditSuccess implements Action {
+  readonly type = TodoActionType.UpdateSuccess
+  constructor(public payload: Todo[]) {}
 }
 
 export class ToggleDoneStatusAll implements Action {
@@ -45,25 +82,31 @@ export class ChangeFilter implements Action {
   constructor(public payload: { filter: TodoFilter }) {}
 }
 
-export const loadAction = createAsyncAction(TodoActionType.Load, () => {
-  const api = new TodosApiService()
-  return api.getAll()
-})
-
-export class Test implements Action {
-  readonly type = TodoActionType.Load
-  payload: any
-  constructor() {
-    // const api = new TodosApiService()
-    this.payload = Promise.reject(1)
-  }
+export class Get implements Action {
+  readonly type = TodoActionType.Get
+  payload = apiService.getAll()
 }
+
+export class GetLoading implements Action {
+  readonly type = TodoActionType.GetLoading
+}
+
+export class GetSuccess implements Action {
+  readonly type = TodoActionType.GetSuccess
+  payload: Todo[]
+}
+
 
 export type TodoActions =
   | Add
+  | AddLoading
+  | AddSuccess
   | DeleteOne
   | DeleteAllDone
-  | Edit
   | ToggleDoneStatusAll
   | ChangeFilter
-  | Test
+  | Get
+  | GetLoading
+  | GetSuccess
+  | Edit
+  | EditSuccess

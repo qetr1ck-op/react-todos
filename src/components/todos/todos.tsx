@@ -24,6 +24,8 @@ interface RouterProps {
 interface StateProps {
   todos: Todo[]
   totalTodos: number
+  isLoading: boolean
+  isLoadingAdd: boolean
 }
 
 interface DispatchProps {
@@ -38,14 +40,13 @@ class Todos extends React.PureComponent<Props, State> {
     isAllChecked: false,
   }
 
-
   componentDidMount(): void {
-    this.dispatch(new fromTodoActions.Test)
+    this.dispatch(new fromTodoActions.Get())
   }
 
   render() {
     const { isAllChecked } = this.state
-    const { todos, totalTodos } = this.props
+    const { todos, totalTodos, isLoading, isLoadingAdd } = this.props
 
     return (
       <section className={style.main}>
@@ -57,19 +58,23 @@ class Todos extends React.PureComponent<Props, State> {
           )}
           <TodoInput
             value=""
+            disabled={isLoadingAdd}
             changeValue={({ value }: Todo) => this.dispatch(new fromTodoActions.Add({ value }))}
           />
         </div>
 
-        <TodoList
-          todos={todos}
-          totalTodos={totalTodos}
-          hasDoneItems={fromTodoSelectors.hasDoneTodos(todos)}
-        />
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <TodoList
+            todos={todos}
+            totalTodos={totalTodos}
+            hasDoneItems={fromTodoSelectors.hasDoneTodos(todos)}
+          />
+        )}
       </section>
     )
   }
-
 
   private checkAllItems = () => {
     this.setState((state: State) => {
@@ -88,6 +93,8 @@ function mapStateToProps(state: fromRootState.RootState, props: Props): StatePro
       state,
       (props.match.params.filter as TodoFilter) || TodoFilter.All,
     ),
+    isLoading: fromTodoSelectors.isLoading(state),
+    isLoadingAdd: fromTodoSelectors.isAddLoading(state),
     totalTodos: todos.length,
   }
 }

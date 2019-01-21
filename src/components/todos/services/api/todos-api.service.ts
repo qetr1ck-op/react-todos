@@ -1,21 +1,38 @@
-enum HttpMethods {
-  Get = 'GET',
-  Post = 'Post'
-}
+import { Todo } from '../../types'
+import { uuidByDate } from '../uuid'
+
+let todos: Todo[] = [
+  {
+    id: uuidByDate(),
+    done: false,
+    value: 'Learn async Redux',
+  },
+]
 
 export class TodosApiService {
-  private readonly rootURI =
-    'https://www.jsonstore.io/e0aad47cfd316be19c71b232482333d64597bb9b8f74f0511d85104dbb326937/todos/'
-
-  async getSingle(id: string) {
-    const response = await fetch(`${this.rootURI}${id}`, {method: HttpMethods.Get})
-
-    return response.json()
+  async getAll(): Promise<Todo[]> {
+    await this.delay()
+    return todos
   }
 
-  async getAll() {
-    const response = await fetch(this.rootURI, {method: HttpMethods.Get})
+  async addSingle(todo: Todo): Promise<Todo> {
+    await this.delay()
+    return todo
+  }
 
-    return response.json()
+  async editSingle(editedTodo: Partial<Todo>): Promise<Todo[]> {
+    await this.delay()
+    let r = todos.map((todo) => {
+      if (todo.id === editedTodo.id) {
+        return { ...todo, ...editedTodo }
+      }
+      return todo
+    })
+    console.log(r)
+    return r
+  }
+
+  private delay(wait: number = 1000): Promise<any> {
+    return new Promise((res) => setTimeout(res, wait))
   }
 }

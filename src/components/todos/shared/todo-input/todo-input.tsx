@@ -8,6 +8,7 @@ interface State {
 }
 interface Props {
   value: string
+  disabled?: boolean
   cssClasses?: string[]
   changeValue?(prop: { value: string }): void
   exitEditMode?(prop: { value: string }): void
@@ -44,6 +45,7 @@ export class TodoInput extends React.PureComponent<Props, State> {
         className={classNames([style.input, this.props.cssClasses])}
         value={value}
         ref={this.elRef}
+        disabled={this.props.disabled}
         onChange={this.change}
         onKeyPress={this.keyPress}
       />

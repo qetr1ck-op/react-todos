@@ -1,7 +1,11 @@
 import { createSelector } from 'reselect'
+
 import { RootState } from '../../../../../store/root'
 import { TodoFilter } from '../../../enums'
 import { Todo } from '../../../types'
+import { TodoState } from '../../reducers/todo'
+
+const getTodoState = (state: RootState) => state.todo
 
 export const getFilteredTodos = createSelector(
   (state: RootState, filter: TodoFilter) => ({ todos: state.todo.todos, filter }),
@@ -19,4 +23,14 @@ export const getFilteredTodos = createSelector(
 export const hasDoneTodos = createSelector(
   (todos: Todo[]) => todos,
   (todos) => todos.some((todo) => todo.done),
+)
+
+export const isLoading = createSelector(
+  getTodoState,
+  (state: TodoState) => state.isLoading,
+)
+
+export const isAddLoading = createSelector(
+  getTodoState,
+  (state: TodoState) => state.isAddLoading || false,
 )

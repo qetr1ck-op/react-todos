@@ -21,6 +21,7 @@ interface DispatchProps {
 }
 
 class TodoItem extends React.PureComponent<Props & DispatchProps, State> {
+  private dispatch = this.props.dispatch
   state = {
     isEditMode: false,
   }
@@ -56,8 +57,6 @@ class TodoItem extends React.PureComponent<Props & DispatchProps, State> {
       </div>
     )
   }
-
-  private dispatch = this.props.dispatch
 
   private exitEditMode = ({ value }) => {
     const { id } = this.props.todo
