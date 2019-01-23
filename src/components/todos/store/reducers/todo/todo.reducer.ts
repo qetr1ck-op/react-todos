@@ -1,7 +1,6 @@
 import { TodoFilter } from '../../../enums'
-// import { uuid } from '../../../services'
 import { Todo } from '../../../types'
-import { TodoActions, TodoActionType } from '../../actions'
+import { ActionType, ActionTypes } from '../../actions'
 
 export interface TodoState {
   todos: TodoDictionary
@@ -22,15 +21,15 @@ const initialState: TodoState = {
   isAddLoading: false,
   error: '',
 }
-export const todoReducer = (state = initialState, action: TodoActions): TodoState => {
+export const todoReducer = (state = initialState, action: ActionTypes): TodoState => {
   switch (action.type) {
-    case TodoActionType.GetLoading: {
+    case ActionType.GetLoading: {
       return { ...state, isLoading: true }
     }
-    case TodoActionType.GetSuccess:
-    case TodoActionType.UpdateSuccess:
-    case TodoActionType.UpdateLoading:
-    case TodoActionType.UpdateError: {
+    case ActionType.GetSuccess:
+    case ActionType.UpdateSuccess:
+    case ActionType.UpdateLoading:
+    case ActionType.UpdateError: {
       return {
         ...state,
         isLoading: false,
@@ -38,10 +37,8 @@ export const todoReducer = (state = initialState, action: TodoActions): TodoStat
       }
     }
 
-    case TodoActionType.AddLoading: {
-      return { ...state, isAddLoading: true }
-    }
-    case TodoActionType.AddSuccess: {
+    case ActionType.AddLoading:
+    case ActionType.AddSuccess: {
       return {
         ...state,
         isAddLoading: false,
@@ -49,25 +46,25 @@ export const todoReducer = (state = initialState, action: TodoActions): TodoStat
       }
     }
 
-    case TodoActionType.DeleteOne: {
+    case ActionType.DeleteOne: {
       /*return {
         filter: state.filter,
         todos: state.todos.filter((todo) => todo.id !== action.payload.id),
       }*/
     }
-    case TodoActionType.DeleteAll: {
+    case ActionType.DeleteAll: {
       /*return {
         filter: state.filter,
         todos: state.todos.filter((todo) => !todo.done),
       }*/
     }
-    case TodoActionType.ToggleStatusAll: {
+    case ActionType.ToggleStatusAll: {
       /*return {
         filter: state.filter,
         todos: state.todos.map((todo) => ({ ...todo, done: action.payload.done })),
       }*/
     }
-    case TodoActionType.FilterChange: {
+    case ActionType.FilterChange: {
       // return { filter: action.payload.filter, todos: state.todos }
     }
 
@@ -77,9 +74,9 @@ export const todoReducer = (state = initialState, action: TodoActions): TodoStat
   }
 }
 
-export function toDictionary<T, K extends keyof T>(array: T[], key: K): { K: T } | any {
-  return array.reduce((item, dictionary) => {
-    return { ...dictionary, [key]: item }
+export function toDictionary<T>(array: T[], key) {
+  return array.reduce((dictionary, item) => {
+    return { ...dictionary, [item[key]]: item }
   }, {})
 }
 

@@ -80,7 +80,7 @@ class TodoItem extends React.PureComponent<Props & DispatchProps, State> {
   }
 
   private deleteItem = () => {
-    this.dispatch(new fromTodoActions.DeleteOne({ id: this.props.todo.id }))
+    this.dispatch(fromTodoActions.deleteOne({ id: this.props.todo.id }))
   }
 }
 

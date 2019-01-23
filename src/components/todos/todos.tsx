@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
-import { Dispatch } from 'redux'
 
 import * as fromRootState from '../../store/root'
 import * as fromTodoActions from './store/actions/todo'
@@ -29,7 +28,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  dispatch: Dispatch<fromTodoActions.TodoActions>
+  dispatch: any
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps<RouterProps>
@@ -41,7 +40,7 @@ class Todos extends React.PureComponent<Props, State> {
   }
 
   componentDidMount(): void {
-    this.dispatch(new fromTodoActions.Get())
+    this.dispatch(fromTodoActions.get())
   }
 
   render() {
@@ -59,7 +58,7 @@ class Todos extends React.PureComponent<Props, State> {
           <TodoInput
             value=""
             disabled={isLoadingAdd}
-            changeValue={({ value }: Todo) => this.dispatch(new fromTodoActions.Add({ value }))}
+            changeValue={({ value }: Todo) => this.dispatch(fromTodoActions.add({ value }))}
           />
         </div>
 
@@ -82,7 +81,7 @@ class Todos extends React.PureComponent<Props, State> {
         isAllChecked: !state.isAllChecked,
       }
     })
-    this.dispatch(new fromTodoActions.ToggleDoneStatusAll({ done: !this.state.isAllChecked }))
+    this.dispatch(fromTodoActions.toggleDoneStatusAll({ done: !this.state.isAllChecked }))
   }
 }
 
