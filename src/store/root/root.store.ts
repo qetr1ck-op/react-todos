@@ -2,6 +2,7 @@ import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction'
 import loggerMiddleware from 'redux-logger'
 import promiseMiddleware from 'redux-promise-middleware'
+import thunk from 'redux-thunk'
 
 import { todoReducer, TodoState } from '../../components/todos'
 import { actionToPlainObject } from '../middlewares'
@@ -20,7 +21,7 @@ const configureStore = (initialState?: object) =>
     combineReducer,
     initialState,
     composeWithDevTools(
-      applyMiddleware(loggerMiddleware, actionToPlainObject, promiseMiddleware()),
+      applyMiddleware(thunk, actionToPlainObject, promiseMiddleware(), loggerMiddleware),
     ),
   )
 

@@ -4,19 +4,23 @@ import { Todo } from '../../../types'
 import { TodoActions, TodoActionType } from '../../actions'
 
 export interface TodoState {
-  todos: Todo[]
+  todos: TodoDictionary
   filter: TodoFilter
   isLoading: boolean
   isAddLoading: boolean
   error: string
 }
 
+export interface TodoDictionary {
+  [id: string]: Todo
+}
+
 const initialState: TodoState = {
-  todos: [],
+  todos: {},
   filter: TodoFilter.All,
   isLoading: false,
   isAddLoading: false,
-  error: ''
+  error: '',
 }
 export const todoReducer = (state = initialState, action: TodoActions): TodoState => {
   switch (action.type) {
@@ -24,11 +28,13 @@ export const todoReducer = (state = initialState, action: TodoActions): TodoStat
       return { ...state, isLoading: true }
     }
     case TodoActionType.GetSuccess:
-    case TodoActionType.UpdateSuccess:  {
+    case TodoActionType.UpdateSuccess:
+    case TodoActionType.UpdateLoading:
+    case TodoActionType.UpdateError: {
       return {
         ...state,
         isLoading: false,
-        todos: action.payload,
+        todos: toDictionary(action.payload, 'id'),
       }
     }
 
@@ -36,7 +42,11 @@ export const todoReducer = (state = initialState, action: TodoActions): TodoStat
       return { ...state, isAddLoading: true }
     }
     case TodoActionType.AddSuccess: {
-      return { ...state, isAddLoading: false, todos: [...state.todos, action.payload] }
+      return {
+        ...state,
+        isAddLoading: false,
+        todos: { ...state.todos, [action.payload.id]: action.payload },
+      }
     }
 
     case TodoActionType.DeleteOne: {
@@ -65,4 +75,14 @@ export const todoReducer = (state = initialState, action: TodoActions): TodoStat
       return state
     }
   }
+}
+
+export function toDictionary<T, K extends keyof T>(array: T[], key: K): { K: T } | any {
+  return array.reduce((item, dictionary) => {
+    return { ...dictionary, [key]: item }
+  }, {})
+}
+
+export function toList<T, K extends keyof T>(dictionary: T): Array<T[K]> {
+  return Object.values(dictionary).map((value) => value)
 }

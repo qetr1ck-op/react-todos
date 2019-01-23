@@ -1,9 +1,11 @@
-import { Action } from 'redux'
+import { Action, ActionCreator, Dispatch } from 'redux'
+import { RootState } from '../../../../../store/root'
 
 import { TodoFilter } from '../../../enums'
 import { TodosApiService } from '../../../services/api'
 import { uuidByDate } from '../../../services/uuid'
 import { Todo } from '../../../types'
+import { getTodoList } from '../../selectors/todo'
 
 export enum TodoActionType {
   Add = '[TODO] ADD',
@@ -13,6 +15,8 @@ export enum TodoActionType {
   DeleteAll = '[TODO] DELETE_ALL',
   Update = '[TODO] UPDATE',
   UpdateSuccess = '[TODO] UPDATE_FULFILLED',
+  UpdateLoading = '[TODO] UPDATE_PENDING',
+  UpdateError = '[TODO] UPDATE_REJECTED',
   ToggleStatusAll = '[TODO] TOGGLE_STATUS_ALL',
   FilterChange = '[TODO] FILTER_CHANGE',
   Get = '[TODO] GET',
@@ -48,29 +52,57 @@ export class DeleteAllDone implements Action {
   readonly type = TodoActionType.DeleteAll
 }
 
-/*
-[] edit -> update
-[] optimistic update?
-[] thunk: update -> 
-1. dispatch(UpdateSuccess)
-2. dispatch(UpdateError)
-*/
-export class Edit implements Action {
-  readonly type = TodoActionType.Update
+interface Update {
+  type: TodoActionType.Update
   payload: Promise<Todo[]>
-  constructor(payload: Partial<Todo>) {
-    this.payload = apiService.editSingle(payload)
-  }
+}
+export const update = (payload: Partial<Todo>) => async (
+  dispatch: Dispatch<TodoActions>,
+  getState: () => RootState,
+) => {
+  const todos = getTodoList(getState())
+  const updatedTodos = todos.map((todo) => {
+    if (todo.id === payload.id) {
+      return { ...todo, ...payload }
+    }
+    return todo
+  })
+  dispatch(updateLoading(updatedTodos))
+
+  apiService
+    .editSingle(payload)
+    .then((todos) => dispatch(updateSuccess(todos)))
+    .catch(() => dispatch(updateError(todos)))
 }
 
-export const EditThunk = (payload: Partial<Todo>) => (dispatch, getState) => {
-  dispatch
+interface UpdateSuccess {
+  type: TodoActionType.UpdateSuccess
+  payload: Todo[]
 }
 
-export class EditSuccess implements Action {
-  readonly type = TodoActionType.UpdateSuccess
-  constructor(public payload: Todo[]) {}
+export const updateSuccess: ActionCreator<UpdateSuccess> = (payload: Todo[]) => ({
+  type: TodoActionType.UpdateSuccess,
+  payload,
+})
+
+interface UpdateLoading {
+  type: TodoActionType.UpdateLoading
+  payload: Todo[]
 }
+
+export const updateLoading: ActionCreator<UpdateLoading> = (payload: Todo[]) => ({
+  type: TodoActionType.UpdateLoading,
+  payload,
+})
+
+interface UpdateError {
+  type: TodoActionType.UpdateError
+  payload: Todo[]
+}
+export const updateError: ActionCreator<UpdateError> = (payload: Todo[]) => ({
+  type: TodoActionType.UpdateError,
+  payload,
+})
 
 export class ToggleDoneStatusAll implements Action {
   readonly type = TodoActionType.ToggleStatusAll
@@ -96,7 +128,6 @@ export class GetSuccess implements Action {
   payload: Todo[]
 }
 
-
 export type TodoActions =
   | Add
   | AddLoading
@@ -108,5 +139,7 @@ export type TodoActions =
   | Get
   | GetLoading
   | GetSuccess
-  | Edit
-  | EditSuccess
+  | Update
+  | UpdateSuccess
+  | UpdateError
+  | UpdateLoading

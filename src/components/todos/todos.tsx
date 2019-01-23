@@ -87,7 +87,6 @@ class Todos extends React.PureComponent<Props, State> {
 }
 
 function mapStateToProps(state: fromRootState.RootState, props: Props): StateProps {
-  const { todos } = state.todo
   return {
     todos: fromTodoSelectors.getFilteredTodos(
       state,
@@ -95,7 +94,7 @@ function mapStateToProps(state: fromRootState.RootState, props: Props): StatePro
     ),
     isLoading: fromTodoSelectors.isLoading(state),
     isLoadingAdd: fromTodoSelectors.isAddLoading(state),
-    totalTodos: todos.length,
+    totalTodos: fromTodoSelectors.getTodoList(state).length,
   }
 }
 
