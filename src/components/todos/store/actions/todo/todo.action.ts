@@ -1,7 +1,6 @@
 import { Action, ActionCreator, Dispatch } from 'redux'
 
 import { RootState } from '../../../../../store/root'
-import { TodoFilter } from '../../../enums'
 import { TodosApiService } from '../../../services/api'
 import { uuidByDate } from '../../../services/uuid'
 import { Todo } from '../../../types'
@@ -11,6 +10,7 @@ export enum ActionType {
   Get = '[TODO] GET',
   GetLoading = '[TODO] GET_PENDING',
   GetSuccess = '[TODO] GET_FULFILLED',
+  GetError = '[TODO] GET_REJECTED',
 
   Add = '[TODO] ADD',
   AddLoading = '[TODO] ADD_PENDING',
@@ -36,6 +36,7 @@ export enum ActionType {
   FilterChange = '[TODO] FILTER_CHANGE',
 }
 
+type GetState = () => RootState
 // region Action Interfaces
 interface GetAction extends Action {
   type: ActionType.Get
@@ -48,6 +49,11 @@ interface GetLoadingAction extends Action {
 
 interface GetSuccessAction extends Action {
   type: ActionType.GetSuccess
+  payload: Todo[]
+}
+
+interface GetErrorAction extends Action {
+  type: ActionType.GetError
   payload: Todo[]
 }
 
@@ -115,17 +121,17 @@ interface UpdateAction extends Action {
   payload: Promise<Todo[]>
 }
 
-interface UpdateSuccess extends Action {
+interface UpdateSuccessAction extends Action {
   type: ActionType.UpdateSuccess
   payload: Todo[]
 }
 
-interface UpdateLoading extends Action {
+interface UpdateLoadingAction extends Action {
   type: ActionType.UpdateLoading
   payload: Todo[]
 }
 
-interface UpdateError extends Action {
+interface UpdateErrorAction extends Action {
   type: ActionType.UpdateError
   payload: Todo[]
 }
@@ -135,15 +141,11 @@ interface ToggleDoneStatusAllAction extends Action {
   payload: Todo[]
 }
 
-interface ChangeFilterAction extends Action {
-  type: ActionType.FilterChange
-  payload: { filter: TodoFilter }
-}
-
 export type ActionTypes =
   | GetAction
   | GetLoadingAction
   | GetSuccessAction
+  | GetErrorAction
   | AddAction
   | AddLoadingAction
   | AddErrorAction
@@ -157,20 +159,26 @@ export type ActionTypes =
   | DeleteAllDoneSuccessAction
   | DeleteAllDoneErrorAction
   | UpdateAction
-  | UpdateSuccess
-  | UpdateLoading
-  | UpdateError
+  | UpdateSuccessAction
+  | UpdateLoadingAction
+  | UpdateErrorAction
   | ToggleDoneStatusAllAction
-  | ChangeFilterAction
 
 // endregion
 
 const apiService = new TodosApiService()
 
-export const get: ActionCreator<GetAction> = () => ({
-  type: ActionType.Get,
-  payload: apiService.getAll(),
-})
+// : ActionCreator<GetAction>
+export const get = () => (dispatch: Dispatch<ActionTypes>, getState: GetState) => {
+  const initTodos = getTodoList(getState())
+
+  dispatch(getLoading())
+
+  apiService
+    .getAll()
+    .then((todos) => dispatch(getSuccess(todos)))
+    .catch(() => dispatch(getError(initTodos)))
+}
 
 export const getLoading: ActionCreator<GetLoadingAction> = () => ({
   type: ActionType.GetLoading,
@@ -178,6 +186,11 @@ export const getLoading: ActionCreator<GetLoadingAction> = () => ({
 
 export const getSuccess: ActionCreator<GetSuccessAction> = (payload: Todo[]) => ({
   type: ActionType.GetSuccess,
+  payload,
+})
+
+export const getError: ActionCreator<GetErrorAction> = (payload: Todo[]) => ({
+  type: ActionType.GetError,
   payload,
 })
 
@@ -287,17 +300,17 @@ export const updateAction = (payload: Partial<Todo>) => async (
     .catch(() => dispatch(updateErrorAction(initialTodos)))
 }
 
-export const updateSuccessAction: ActionCreator<UpdateSuccess> = (payload: Todo[]) => ({
+export const updateSuccessAction: ActionCreator<UpdateSuccessAction> = (payload: Todo[]) => ({
   type: ActionType.UpdateSuccess,
   payload,
 })
 
-export const updateLoadingAction: ActionCreator<UpdateLoading> = (payload: Todo[]) => ({
+export const updateLoadingAction: ActionCreator<UpdateLoadingAction> = (payload: Todo[]) => ({
   type: ActionType.UpdateLoading,
   payload,
 })
 
-export const updateErrorAction: ActionCreator<UpdateError> = (payload: Todo[]) => ({
+export const updateErrorAction: ActionCreator<UpdateErrorAction> = (payload: Todo[]) => ({
   type: ActionType.UpdateError,
   payload,
 })
