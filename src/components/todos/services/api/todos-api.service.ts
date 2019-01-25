@@ -16,21 +16,33 @@ export class TodosApiService {
     return fakeDB
   }
 
-  async addSingle(todo: Todo): Promise<Todo> {
+  async addOne(todo: Todo): Promise<Todo> {
     await this.delay()
     fakeDB = [...fakeDB, todo]
 
     return todo
   }
 
-  async editSingle(editedTodo: Partial<Todo>): Promise<Todo[]> {
+  async editOne(editedTodo: Partial<Todo>): Promise<Todo[]> {
     await this.delay()
-    return fakeDB.map((todo) => {
+    fakeDB = fakeDB.map((todo) => {
       if (todo.id === editedTodo.id) {
         return { ...todo, ...editedTodo }
       }
       return todo
     })
+    return fakeDB
+  }
+
+  async deleteOne(deletedTodo: Partial<Todo>): Promise<Todo[]> {
+    await this.delay()
+    return fakeDB.filter(todo => todo.id !== deletedTodo.id)
+  }
+
+  async deleteAll(): Promise<Todo[]> {
+    await this.delay()
+    fakeDB = []
+    return fakeDB
   }
 
   private delay(wait: number = 1000): Promise<any> {

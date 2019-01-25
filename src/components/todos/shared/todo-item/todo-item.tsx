@@ -61,18 +61,18 @@ class TodoItem extends React.PureComponent<Props & DispatchProps, State> {
     const { id } = this.props.todo
 
     this.setState({ isEditMode: false })
-    this.dispatch(fromTodoActions.update({ id, value }))
+    this.dispatch(fromTodoActions.updateAction({ id, value }))
   }
 
   private changeValue = ({ value }) => {
     this.setState({ isEditMode: false })
-    this.dispatch(fromTodoActions.update({ id: this.props.todo.id, value }))
+    this.dispatch(fromTodoActions.updateAction({ id: this.props.todo.id, value }))
   }
 
   private changeStatus = () => {
     const { id, done } = this.props.todo
 
-    this.dispatch(fromTodoActions.update({ id, done: !done }))
+    this.dispatch(fromTodoActions.updateAction({ id, done: !done }))
   }
 
   private enterUpdateMode = () => {

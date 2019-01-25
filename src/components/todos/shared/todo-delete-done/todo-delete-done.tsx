@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
 
 import * as fromTodoActions from '../../store'
 
 import style from './todo-delete.css'
 
 interface DispatchProps {
-  dispatch: Dispatch<fromTodoActions.ActionTypes>
+  dispatch: any
 }
 
 const TodoDeleteDone: React.FunctionComponent<DispatchProps> = ({ dispatch }) => {

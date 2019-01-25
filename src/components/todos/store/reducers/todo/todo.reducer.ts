@@ -27,9 +27,19 @@ export const todoReducer = (state = initialState, action: ActionTypes): TodoStat
       return { ...state, isLoading: true }
     }
     case ActionType.GetSuccess:
+
     case ActionType.UpdateSuccess:
     case ActionType.UpdateLoading:
-    case ActionType.UpdateError: {
+    case ActionType.UpdateError:
+
+    case ActionType.DeleteOneLoading:
+    case ActionType.DeleteOneSuccess:
+    case ActionType.DeleteOneError:
+
+    case ActionType.DeleteAllLoading:
+    case ActionType.DeleteAllSuccess:
+
+    case ActionType.ToggleStatusAll: {
       return {
         ...state,
         isLoading: false,
@@ -45,29 +55,6 @@ export const todoReducer = (state = initialState, action: ActionTypes): TodoStat
         todos: { ...state.todos, [action.payload.id]: action.payload },
       }
     }
-
-    case ActionType.DeleteOne: {
-      /*return {
-        filter: state.filter,
-        todos: state.todos.filter((todo) => todo.id !== action.payload.id),
-      }*/
-    }
-    case ActionType.DeleteAll: {
-      /*return {
-        filter: state.filter,
-        todos: state.todos.filter((todo) => !todo.done),
-      }*/
-    }
-    case ActionType.ToggleStatusAll: {
-      /*return {
-        filter: state.filter,
-        todos: state.todos.map((todo) => ({ ...todo, done: action.payload.done })),
-      }*/
-    }
-    case ActionType.FilterChange: {
-      // return { filter: action.payload.filter, todos: state.todos }
-    }
-
     default: {
       return state
     }

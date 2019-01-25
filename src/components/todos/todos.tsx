@@ -81,7 +81,7 @@ class Todos extends React.PureComponent<Props, State> {
         isAllChecked: !state.isAllChecked,
       }
     })
-    this.dispatch(fromTodoActions.toggleDoneStatusAll({ done: !this.state.isAllChecked }))
+    this.dispatch(fromTodoActions.toggleDoneStatusAllAction({ done: !this.state.isAllChecked }))
   }
 }
 
