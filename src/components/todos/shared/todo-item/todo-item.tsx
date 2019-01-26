@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import * as fromTodoActions from '../../store/actions/todo'
-
 import style from './todo-item.css'
 
-import { Todo } from '../../types'
+import { Todo } from '../../models'
+import * as fromTodoActions from '../../store'
 import { TodoInput } from '../todo-input'
 
 interface State {

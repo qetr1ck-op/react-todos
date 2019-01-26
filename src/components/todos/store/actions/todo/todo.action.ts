@@ -1,10 +1,11 @@
 import { Action, ActionCreator, Dispatch } from 'redux'
 
-import { RootState } from '../../../../../store/root'
-import { TodosApiService } from '../../../services/api'
-import { uuidByDate } from '../../../services/uuid'
-import { Todo } from '../../../types'
-import { getTodoList } from '../../selectors/todo'
+import { uuidByDate } from '@root/services'
+import { RootState } from '@root/store'
+
+import { Todo } from '../../../models'
+import { TodosApiService } from '../../../services'
+import { getTodoList } from '../../selectors'
 
 export enum ActionType {
   Get = '[TODO] GET',
@@ -33,7 +34,6 @@ export enum ActionType {
   UpdateError = '[TODO] UPDATE_REJECTED',
 
   ToggleStatusAll = '[TODO] TOGGLE_STATUS_ALL',
-  FilterChange = '[TODO] FILTER_CHANGE',
 }
 
 type GetState = () => RootState
@@ -180,16 +180,16 @@ export const get = () => (dispatch: Dispatch<ActionTypes>, getState: GetState) =
     .catch(() => dispatch(getError(initTodos)))
 }
 
-export const getLoading: ActionCreator<GetLoadingAction> = () => ({
+const getLoading: ActionCreator<GetLoadingAction> = () => ({
   type: ActionType.GetLoading,
 })
 
-export const getSuccess: ActionCreator<GetSuccessAction> = (payload: Todo[]) => ({
+const getSuccess: ActionCreator<GetSuccessAction> = (payload: Todo[]) => ({
   type: ActionType.GetSuccess,
   payload,
 })
 
-export const getError: ActionCreator<GetErrorAction> = (payload: Todo[]) => ({
+const getError: ActionCreator<GetErrorAction> = (payload: Todo[]) => ({
   type: ActionType.GetError,
   payload,
 })
@@ -208,17 +208,17 @@ export const add = (payload: { value: string }) => (
     .catch(() => dispatch(addError(initialTodos)))
 }
 
-export const addLoading: ActionCreator<AddLoadingAction> = (payload: Todo) => ({
+const addLoading: ActionCreator<AddLoadingAction> = (payload: Todo) => ({
   type: ActionType.AddLoading,
   payload,
 })
 
-export const addSuccess: ActionCreator<AddSuccessAction> = (payload: Todo) => ({
+const addSuccess: ActionCreator<AddSuccessAction> = (payload: Todo) => ({
   type: ActionType.AddSuccess,
   payload,
 })
 
-export const addError: ActionCreator<AddErrorAction> = (payload: Todo[]) => ({
+const addError: ActionCreator<AddErrorAction> = (payload: Todo[]) => ({
   type: ActionType.AddError,
   payload,
 })
@@ -235,17 +235,17 @@ export const deleteOne: any = (payload: Partial<Todo>) => (dispatch, getState) =
     .catch(() => dispatch(deleteOneError(initialTodos)))
 }
 
-export const deleteOneLoading: ActionCreator<DeleteOneLoading> = (payload: Todo[]) => ({
+const deleteOneLoading: ActionCreator<DeleteOneLoading> = (payload: Todo[]) => ({
   type: ActionType.DeleteOneLoading,
   payload,
 })
 
-export const deleteOneSuccess: ActionCreator<DeleteOneSuccess> = (payload: Todo[]) => ({
+const deleteOneSuccess: ActionCreator<DeleteOneSuccess> = (payload: Todo[]) => ({
   type: ActionType.DeleteOneSuccess,
   payload,
 })
 
-export const deleteOneError: ActionCreator<DeleteOneError> = (payload: Todo[]) => ({
+const deleteOneError: ActionCreator<DeleteOneError> = (payload: Todo[]) => ({
   type: ActionType.DeleteOneError,
   payload,
 })
@@ -260,23 +260,21 @@ export const deleteAllDone = () => (dispatch: Dispatch<ActionTypes>, getState: (
     .catch(() => dispatch(deleteAllDoneErrorAction(initialTodos)))
 }
 
-export const deleteAllDoneLoadingAction: ActionCreator<DeleteAllDoneLoadingAction> = (
+const deleteAllDoneLoadingAction: ActionCreator<DeleteAllDoneLoadingAction> = (
   payload: Todo[],
 ) => ({
   type: ActionType.DeleteAllLoading,
   payload,
 })
 
-export const deleteAllDoneSuccessAction: ActionCreator<DeleteAllDoneSuccessAction> = (
+const deleteAllDoneSuccessAction: ActionCreator<DeleteAllDoneSuccessAction> = (
   payload: Todo[],
 ) => ({
   type: ActionType.DeleteAllSuccess,
   payload,
 })
 
-export const deleteAllDoneErrorAction: ActionCreator<DeleteAllDoneErrorAction> = (
-  payload: Todo[],
-) => ({
+const deleteAllDoneErrorAction: ActionCreator<DeleteAllDoneErrorAction> = (payload: Todo[]) => ({
   type: ActionType.DeleteAllError,
   payload,
 })
@@ -300,17 +298,17 @@ export const updateAction = (payload: Partial<Todo>) => async (
     .catch(() => dispatch(updateErrorAction(initialTodos)))
 }
 
-export const updateSuccessAction: ActionCreator<UpdateSuccessAction> = (payload: Todo[]) => ({
+const updateSuccessAction: ActionCreator<UpdateSuccessAction> = (payload: Todo[]) => ({
   type: ActionType.UpdateSuccess,
   payload,
 })
 
-export const updateLoadingAction: ActionCreator<UpdateLoadingAction> = (payload: Todo[]) => ({
+const updateLoadingAction: ActionCreator<UpdateLoadingAction> = (payload: Todo[]) => ({
   type: ActionType.UpdateLoading,
   payload,
 })
 
-export const updateErrorAction: ActionCreator<UpdateErrorAction> = (payload: Todo[]) => ({
+const updateErrorAction: ActionCreator<UpdateErrorAction> = (payload: Todo[]) => ({
   type: ActionType.UpdateError,
   payload,
 })

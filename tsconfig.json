@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": "./", // enables project relative paths config
-    "paths": { // define paths mappings
-//      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
-      // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
+    "paths": {
+      // define paths mappings
+      "@root/*": ["src/*"] // will enable -> import { ... } from '@src/components',
+      //       in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
@@ -17,10 +18,7 @@
     "importHelpers": true, // importing helper functions from tslib
     "noEmitHelpers": true, // disable emitting inline helper functions
     "jsx": "react", // process JSX
-    "lib": [
-      "dom",
-      "es2018"
-    ],
+    "lib": ["dom", "es2018"],
     "target": "es5", // "es2015" for ES6+ engines
     "module": "commonjs", // "es2015" for tree-shaking
     "moduleResolution": "node",
@@ -36,10 +34,7 @@
     "removeComments": true,
     "sourceMap": true
   },
-  "include": [
-    "src/**/*",
-    "extenstions.d.ts"
-  ],
+  "include": ["src/**/*", "extenstions.d.ts"],
   "exclude": [
     "node_modules",
     "build",

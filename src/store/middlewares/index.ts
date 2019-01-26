@@ -1,1 +1,1 @@
-export * from './action-to-plain-object';
+export * from './action-to-plain-object'

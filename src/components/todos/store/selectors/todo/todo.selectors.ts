@@ -1,9 +1,10 @@
+import { toList } from '@root/services'
 import { createSelector } from 'reselect'
 
-import { RootState } from '../../../../../store/root'
-import { TodoFilter } from '../../../enums'
-import { Todo } from '../../../types'
-import { TodoState, toList } from '../../reducers/todo'
+import { RootState } from '@root/store'
+
+import { Todo, TodoFilter } from '../../../models'
+import { TodoState } from '../../reducers'
 
 const getTodoState = (state: RootState) => state.todo
 

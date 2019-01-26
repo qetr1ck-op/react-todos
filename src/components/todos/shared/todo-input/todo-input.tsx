@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import React from 'react'
 
-import style from './todo-input.css';
+import style from './todo-input.css'
 
 interface State {
   value: string

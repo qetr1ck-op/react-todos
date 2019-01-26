@@ -11,7 +11,7 @@ export class Root extends React.Component {
     return (
       <StoreProvider store={store}>
         <Router>
-          <Route exact path="/:filter?" component={TodosConnected}/>
+          <Route exact path="/:filter?" component={TodosConnected} />
           {/*<TodosContainer />*/}
         </Router>
       </StoreProvider>

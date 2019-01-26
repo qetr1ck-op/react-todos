@@ -11,9 +11,7 @@ interface DispatchProps {
 
 const TodoDeleteDone: React.FunctionComponent<DispatchProps> = ({ dispatch }) => {
   return (
-    <button
-      className={style.deleteBtn}
-      onClick={() => dispatch(fromTodoActions.deleteAllDone())}>
+    <button className={style.deleteBtn} onClick={() => dispatch(fromTodoActions.deleteAllDone())}>
       Clear done
     </button>
   )

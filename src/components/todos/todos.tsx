@@ -6,18 +6,13 @@ import * as fromRootState from '../../store/root'
 import * as fromTodoActions from './store/actions/todo'
 import * as fromTodoSelectors from './store/selectors/todo'
 
-import { TodoFilter } from './enums'
+import { Todo, TodoFilter } from './models'
 import { TodoCheckAll, TodoInput, TodoList } from './shared'
-import { Todo } from './types'
 
 import style from './todos.css'
 
 interface State {
   isAllChecked: boolean
-}
-
-interface RouterProps {
-  filter?: string
 }
 
 interface StateProps {
@@ -29,6 +24,10 @@ interface StateProps {
 
 interface DispatchProps {
   dispatch: any
+}
+
+interface RouterProps {
+  filter?: string
 }
 
 type Props = StateProps & DispatchProps & RouteComponentProps<RouterProps>

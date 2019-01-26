@@ -1,9 +1,9 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 import style from './todo-filters.css'
 
-import { NavLink } from 'react-router-dom'
-import { TodoFilter } from '../../enums'
+import { TodoFilter } from '../../models'
 
 export const routes = {
   [TodoFilter.All]: { path: '/', label: 'All' },

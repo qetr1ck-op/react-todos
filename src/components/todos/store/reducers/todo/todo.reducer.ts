@@ -1,5 +1,6 @@
-import { TodoFilter } from '../../../enums'
-import { Todo } from '../../../types'
+import { toDictionary } from '@root/services'
+
+import { Todo, TodoFilter } from '../../../models'
 import { ActionType, ActionTypes } from '../../actions'
 
 export interface TodoState {
@@ -59,14 +60,4 @@ export const todoReducer = (state = initialState, action: ActionTypes): TodoStat
       return state
     }
   }
-}
-
-export function toDictionary<T>(array: T[], key) {
-  return array.reduce((dictionary, item) => {
-    return { ...dictionary, [item[key]]: item }
-  }, {})
-}
-
-export function toList<T, K extends keyof T>(dictionary: T): Array<T[K]> {
-  return Object.values(dictionary).map((value) => value)
 }

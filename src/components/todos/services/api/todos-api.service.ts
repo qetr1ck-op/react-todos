@@ -1,5 +1,5 @@
-import { Todo } from '../../types'
-import { uuidByDate } from '../uuid'
+import { uuidByDate } from '@root/services'
+import { Todo } from '../../models'
 
 let fakeDB: Todo[] = [
   {
@@ -36,7 +36,7 @@ export class TodosApiService {
 
   async deleteOne(deletedTodo: Partial<Todo>): Promise<Todo[]> {
     await this.delay()
-    return fakeDB.filter(todo => todo.id !== deletedTodo.id)
+    return fakeDB.filter((todo) => todo.id !== deletedTodo.id)
   }
 
   async deleteAll(): Promise<Todo[]> {

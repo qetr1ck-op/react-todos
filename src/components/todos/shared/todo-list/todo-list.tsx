@@ -2,7 +2,7 @@ import React from 'react'
 
 import style from './todo-list.css'
 
-import { Todo } from '../../types'
+import { Todo } from '../../models/types'
 import { TodoCount } from '../todo-count'
 import { TodoDeleteDoneConnected } from '../todo-delete-done'
 import { TodoFilters } from '../todo-filters'

@@ -1,1 +1,1 @@
-export * from './action-to-plain-object.middleware';
+export * from './action-to-plain-object.middleware'

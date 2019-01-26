@@ -1,42 +1,41 @@
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
-const resolve = require('resolve');
-const webpack = require('webpack');
-const PnpWebpackPlugin = require('pnp-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
-const getClientEnvironment = require('./env');
-const paths = require('./paths');
-const ManifestPlugin = require('webpack-manifest-plugin');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
-const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
-
+const fs = require('fs')
+const path = require('path')
+const resolve = require('resolve')
+const webpack = require('webpack')
+const PnpWebpackPlugin = require('pnp-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
+const getClientEnvironment = require('./env')
+const paths = require('./paths')
+const ManifestPlugin = require('webpack-manifest-plugin')
+const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt')
+const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-const publicPath = '/';
+const publicPath = '/'
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
-const publicUrl = '';
+const publicUrl = ''
 // Get environment variables to inject into our app.
-const env = getClientEnvironment(publicUrl);
+const env = getClientEnvironment(publicUrl)
 
 // Check if TypeScript is setup
-const useTypeScript = fs.existsSync(paths.appTsConfig);
+const useTypeScript = fs.existsSync(paths.appTsConfig)
 
 // style files regexes
-const cssRegex = /\.css$/;
-const cssModuleRegex = /(\.module\.)?css$/;
-const sassRegex = /\.(scss|sass)$/;
-const sassModuleRegex = /\.module\.(scss|sass)$/;
+const cssRegex = /\.css$/
+const cssModuleRegex = /(\.module\.)?css$/
+const sassRegex = /\.(scss|sass)$/
+const sassModuleRegex = /\.module\.(scss|sass)$/
 
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -66,12 +65,12 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         ],
       },
     },
-  ];
+  ]
   if (preProcessor) {
-    loaders.push(require.resolve(preProcessor));
+    loaders.push(require.resolve(preProcessor))
   }
-  return loaders;
-};
+  return loaders
+}
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -113,7 +112,7 @@ module.exports = {
     // This is the URL that app is served from. We use "/" in development.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info =>
+    devtoolModuleFilenameTemplate: (info) =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   optimization: {
@@ -135,7 +134,7 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/253
     modules: ['node_modules'].concat(
       // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+      process.env.NODE_PATH.split(path.delimiter).filter(Boolean),
     ),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
@@ -144,12 +143,13 @@ module.exports = {
     // `web` extension prefixes have been added for better support
     // for React Native Web.
     extensions: paths.moduleFileExtensions
-      .map(ext => `.${ext}`)
-      .filter(ext => useTypeScript || !ext.includes('ts')),
+      .map((ext) => `.${ext}`)
+      .filter((ext) => useTypeScript || !ext.includes('ts')),
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      '@root': paths.appSrc,
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding
@@ -186,7 +186,6 @@ module.exports = {
             options: {
               formatter: require.resolve('react-dev-utils/eslintFormatter'),
               eslintPath: require.resolve('eslint'),
-
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -216,9 +215,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
-              ),
+              customize: require.resolve('babel-preset-react-app/webpack-overrides'),
 
               plugins: [
                 [
@@ -251,10 +248,7 @@ module.exports = {
               configFile: false,
               compact: false,
               presets: [
-                [
-                  require.resolve('babel-preset-react-app/dependencies'),
-                  { helpers: true },
-                ],
+                [require.resolve('babel-preset-react-app/dependencies'), { helpers: true }],
               ],
               cacheDirectory: true,
               // Don't waste time on Gzipping the cache
@@ -310,7 +304,7 @@ module.exports = {
                 modules: true,
                 getLocalIdent: getCSSModuleLocalIdent,
               },
-              'sass-loader'
+              'sass-loader',
             ),
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -418,4 +412,4 @@ module.exports = {
   // Turn off performance processing because we utilize
   // our own hints via the FileSizeReporter
   performance: false,
-};
+}
