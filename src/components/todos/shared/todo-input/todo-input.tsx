@@ -26,6 +26,7 @@ export class TodoInput extends React.PureComponent<Props, State> {
 
   componentDidMount(): void {
     this.setState({ value: this.props.value })
+    this.elRef.current!.focus()
   }
 
   componentDidUpdate() {

@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
 
-import * as fromRootState from '../../store/root'
-import * as fromTodoActions from './store/actions/todo'
+import * as fromRootStore from '@root/store'
+
+import * as fromTodoActions from './store/actions/todo/todo.actions'
 import * as fromTodoSelectors from './store/selectors/todo'
 
 import { Todo, TodoFilter } from './models'
@@ -39,7 +40,7 @@ class Todos extends React.PureComponent<Props, State> {
   }
 
   componentDidMount(): void {
-    this.dispatch(fromTodoActions.get())
+    this.dispatch(fromTodoActions.getAll.request())
   }
 
   render() {
@@ -48,7 +49,7 @@ class Todos extends React.PureComponent<Props, State> {
 
     return (
       <section className={style.main}>
-        <pre>{JSON.stringify(this.state, null, 2)}</pre>
+        {/*<pre>{JSON.stringify(this.state, null, 2)}</pre>*/}
         <h1 className={style.title}>todos</h1>
         <div className={style.header}>
           {!!todos.length && (
@@ -57,7 +58,7 @@ class Todos extends React.PureComponent<Props, State> {
           <TodoInput
             value=""
             disabled={isLoadingAdd}
-            changeValue={({ value }: Todo) => this.dispatch(fromTodoActions.add({ value }))}
+            changeValue={({ value }: Todo) => this.dispatch(fromTodoActions.add.request({ value }))}
           />
         </div>
 
@@ -80,11 +81,11 @@ class Todos extends React.PureComponent<Props, State> {
         isAllChecked: !state.isAllChecked,
       }
     })
-    this.dispatch(fromTodoActions.toggleDoneStatusAllAction({ done: !this.state.isAllChecked }))
+    this.dispatch(fromTodoActions.toggleDoneStatusAll({ done: !this.state.isAllChecked }))
   }
 }
 
-function mapStateToProps(state: fromRootState.RootState, props: Props): StateProps {
+function mapStateToProps(state: fromRootStore.RootState, props: Props): StateProps {
   return {
     todos: fromTodoSelectors.getFilteredTodos(
       state,

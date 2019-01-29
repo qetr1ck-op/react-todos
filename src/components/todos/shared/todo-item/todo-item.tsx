@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import style from './todo-item.css'
 
 import { Todo } from '../../models'
-import * as fromTodoActions from '../../store'
+import * as fromTodoActions from '../../store/actions'
 import { TodoInput } from '../todo-input'
 
 interface State {
@@ -57,21 +57,25 @@ class TodoItem extends React.PureComponent<Props & DispatchProps, State> {
   }
 
   private exitEditMode = ({ value }) => {
-    const { id } = this.props.todo
-
     this.setState({ isEditMode: false })
-    this.dispatch(fromTodoActions.updateAction({ id, value }))
+    if (value === this.props.todo.value) {
+      return
+    }
+    this.dispatch(fromTodoActions.update.request({ ...this.props.todo, value }))
   }
 
   private changeValue = ({ value }) => {
     this.setState({ isEditMode: false })
-    this.dispatch(fromTodoActions.updateAction({ id: this.props.todo.id, value }))
+    if (value === this.props.todo.value) {
+      return
+    }
+    this.dispatch(fromTodoActions.update.request({ ...this.props.todo, value }))
   }
 
   private changeStatus = () => {
-    const { id, done } = this.props.todo
-
-    this.dispatch(fromTodoActions.updateAction({ id, done: !done }))
+    this.dispatch(
+      fromTodoActions.update.request({ ...this.props.todo, done: !this.props.todo.done }),
+    )
   }
 
   private enterUpdateMode = () => {
@@ -79,7 +83,7 @@ class TodoItem extends React.PureComponent<Props & DispatchProps, State> {
   }
 
   private deleteItem = () => {
-    this.dispatch(fromTodoActions.deleteOne({ id: this.props.todo.id }))
+    this.dispatch(fromTodoActions.remove.request({ id: this.props.todo.id }))
   }
 }
 

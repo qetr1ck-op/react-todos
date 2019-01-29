@@ -1,7 +1,9 @@
-import { toDictionary } from '@root/services'
+import { toDictionary, toList, uuidByDate } from '@root/services'
+import { RootAction } from '@root/store'
+import { getType } from 'typesafe-actions'
 
 import { Todo, TodoFilter } from '../../../models'
-import { ActionType, ActionTypes } from '../../actions'
+import * as actions from '../../actions'
 
 export interface TodoState {
   todos: TodoDictionary
@@ -22,40 +24,66 @@ const initialState: TodoState = {
   isAddLoading: false,
   error: '',
 }
-export const todoReducer = (state = initialState, action: ActionTypes): TodoState => {
+
+// TODO: errors
+// TODO: list to dictionary?
+export const todoReducer = (state = initialState, action: RootAction): TodoState => {
   switch (action.type) {
-    case ActionType.GetLoading: {
-      return { ...state, isLoading: true }
-    }
-    case ActionType.GetSuccess:
-
-    case ActionType.UpdateSuccess:
-    case ActionType.UpdateLoading:
-    case ActionType.UpdateError:
-
-    case ActionType.DeleteOneLoading:
-    case ActionType.DeleteOneSuccess:
-    case ActionType.DeleteOneError:
-
-    case ActionType.DeleteAllLoading:
-    case ActionType.DeleteAllSuccess:
-
-    case ActionType.ToggleStatusAll: {
+    case getType(actions.getAll.success):
+    case getType(actions.add.success):
+    case getType(actions.removeDoneAll.success): {
       return {
         ...state,
         isLoading: false,
+        isAddLoading: false,
         todos: toDictionary(action.payload, 'id'),
       }
     }
 
-    case ActionType.AddLoading:
-    case ActionType.AddSuccess: {
+    case getType(actions.update.request): {
+      const todos = state.todos
+      todos[action.payload.id] = { ...action.payload }
+
+      return { ...state, todos }
+    }
+
+    case getType(actions.getAll.request): {
+      return { ...state, isLoading: true }
+    }
+
+    case getType(actions.removeDoneAll.request): {
+      const todos = toList(state.todos).filter((todo) => !todo.done)
+
+      return { ...state, todos: toDictionary(todos, 'id') }
+    }
+
+    case getType(actions.add.request): {
+      const newTodo = { ...action.payload, id: uuidByDate() } as Todo
+      const todos = { ...state.todos, [newTodo.id]: newTodo }
+
+      return { ...state, isAddLoading: true, todos }
+    }
+
+    case getType(actions.remove.request): {
+      const todos = { ...state.todos }
+      delete todos[action.payload.id]
+
+      return { ...state, todos }
+    }
+
+    case getType(actions.toggleDoneStatusAll): {
+      const todos = toList({ ...state.todos }).map((todo) => ({
+        ...todo,
+        done: action.payload.done,
+      }))
+
       return {
         ...state,
-        isAddLoading: false,
-        todos: { ...state.todos, [action.payload.id]: action.payload },
+        isLoading: false,
+        todos: toDictionary(todos, 'id'),
       }
     }
+
     default: {
       return state
     }

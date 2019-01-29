@@ -1,1 +1,5 @@
-export * from './root'
+export * from './store'
+export * from './reducer'
+export * from './epic'
+export * from './service'
+export * from './action'
