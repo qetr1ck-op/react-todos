@@ -1,7 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
+import { Dispatch } from 'redux'
 
+import { connect } from '@root/services'
 import * as fromRootStore from '@root/store'
 
 import * as fromTodoActions from './store/actions/todo/todo.actions'
@@ -24,7 +25,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  dispatch: any
+  dispatch: Dispatch<fromRootStore.RootAction>
 }
 
 interface RouterProps {
@@ -33,7 +34,20 @@ interface RouterProps {
 
 type Props = StateProps & DispatchProps & RouteComponentProps<RouterProps>
 
-class Todos extends React.PureComponent<Props, State> {
+function mapStateToProps(state: fromRootStore.RootState, props: Props): StateProps {
+  return {
+    todos: fromTodoSelectors.getFilteredTodos(
+      state,
+      (props.match.params.filter as TodoFilter) || TodoFilter.All,
+    ),
+    isLoading: fromTodoSelectors.isLoading(state),
+    isLoadingAdd: fromTodoSelectors.isAddLoading(state),
+    totalTodos: fromTodoSelectors.getTodoList(state).length,
+  }
+}
+
+@connect<StateProps>(mapStateToProps)
+export class Todos extends React.PureComponent<Props, State> {
   private dispatch = this.props.dispatch
   state = {
     isAllChecked: false,
@@ -85,16 +99,4 @@ class Todos extends React.PureComponent<Props, State> {
   }
 }
 
-function mapStateToProps(state: fromRootStore.RootState, props: Props): StateProps {
-  return {
-    todos: fromTodoSelectors.getFilteredTodos(
-      state,
-      (props.match.params.filter as TodoFilter) || TodoFilter.All,
-    ),
-    isLoading: fromTodoSelectors.isLoading(state),
-    isLoadingAdd: fromTodoSelectors.isAddLoading(state),
-    totalTodos: fromTodoSelectors.getTodoList(state).length,
-  }
-}
 
-export const TodosConnected = connect<StateProps>(mapStateToProps)(Todos)
