@@ -1,40 +1,42 @@
+import { observer } from 'mobx-react'
 import React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Dispatch } from 'redux'
 
-import { connect } from '@root/services'
-import * as fromRootStore from '@root/store'
+// import * as fromRootStore from '@root/store'
 
-import * as fromTodoActions from './store/actions/todo/todo.actions'
-import * as fromTodoSelectors from './store/selectors/todo'
+// import * as fromTodoActions from './store/actions/todo/todo.actions'
+// import * as fromTodoSelectors from './store/selectors/todo'
 
-import { Todo, TodoFilter } from './models'
+import { TodoStore } from './store/todo'
+
+import { Todo } from './models'
 import { TodoCheckAll, TodoInput, TodoList } from './shared'
 
 import style from './todos.css'
 
 interface State {
   isAllChecked: boolean
+  todosState: TodoStore
 }
 
-interface StateProps {
+/*interface StateProps {
   todos: Todo[]
   totalTodos: number
   isLoading: boolean
   isLoadingAdd: boolean
-}
+}*/
 
-interface DispatchProps {
+/*interface DispatchProps {
   dispatch: Dispatch<fromRootStore.RootAction>
-}
+}*/
 
 interface RouterProps {
   filter?: string
 }
 
-type Props = StateProps & DispatchProps & RouteComponentProps<RouterProps>
+type Props = RouteComponentProps<RouterProps>
 
-function mapStateToProps(state: fromRootStore.RootState, props: Props): StateProps {
+/*function mapStateToProps(state: fromRootStore.RootState, props: Props): StateProps {
   return {
     todos: fromTodoSelectors.getFilteredTodos(
       state,
@@ -44,35 +46,37 @@ function mapStateToProps(state: fromRootStore.RootState, props: Props): StatePro
     isLoadingAdd: fromTodoSelectors.isAddLoading(state),
     totalTodos: fromTodoSelectors.getTodoList(state).length,
   }
-}
+}*/
 
-@connect<StateProps>(mapStateToProps)
+@observer
 export class Todos extends React.PureComponent<Props, State> {
-  private dispatch = this.props.dispatch
   state = {
     isAllChecked: false,
+    todosState: new TodoStore(),
   }
 
-  componentDidMount(): void {
+  /*componentDidMount(): void {
     this.dispatch(fromTodoActions.getAll.request())
-  }
+  }*/
 
   render() {
-    const { isAllChecked } = this.state
-    const { todos, totalTodos, isLoading, isLoadingAdd } = this.props
+    const { isAllChecked, todosState } = this.state
+    const isLoadingAdd = false
+    const isLoading = false
+    // const { todos, totalTodos, isLoading, isLoadingAdd } = this.props
 
     return (
       <section className={style.main}>
         {/*<pre>{JSON.stringify(this.state, null, 2)}</pre>*/}
         <h1 className={style.title}>todos</h1>
         <div className={style.header}>
-          {!!todos.length && (
+          {!!todosState.totalItems && (
             <TodoCheckAll isAllChecked={isAllChecked} checkAll={this.checkAllItems} />
           )}
           <TodoInput
             value=""
             disabled={isLoadingAdd}
-            changeValue={({ value }: Todo) => this.dispatch(fromTodoActions.add.request({ value }))}
+            changeValue={({ value }: Todo) => todosState.addTodo(value)}
           />
         </div>
 
@@ -80,9 +84,9 @@ export class Todos extends React.PureComponent<Props, State> {
           <div>Loading...</div>
         ) : (
           <TodoList
-            todos={todos}
-            totalTodos={totalTodos}
-            hasDoneItems={fromTodoSelectors.hasDoneTodos(todos)}
+            todos={todosState.todos}
+            totalTodos={todosState.totalItems}
+            hasDoneItems={todosState.hasDoneItems}
           />
         )}
       </section>
@@ -95,8 +99,6 @@ export class Todos extends React.PureComponent<Props, State> {
         isAllChecked: !state.isAllChecked,
       }
     })
-    this.dispatch(fromTodoActions.toggleDoneStatusAll({ done: !this.state.isAllChecked }))
+    // this.dispatch(fromTodoActions.toggleDoneStatusAll({ done: !this.state.isAllChecked }))
   }
 }
-
-
