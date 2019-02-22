@@ -18,8 +18,8 @@
       {
         "order": [
           "public-static-field",
-          "private-instance-field",
           "public-instance-field",
+          "private-instance-field",
           "public-constructor",
           "public-instance-method",
           "private-static-field",
