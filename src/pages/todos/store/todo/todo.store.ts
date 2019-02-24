@@ -1,10 +1,6 @@
 import { Todo, TodoFilter } from '@root/pages/todos/models'
 import { TodosApiService } from '@root/pages/todos/services'
-import { RootStore } from '@root/store'
 import { action, computed, observable, reaction } from 'mobx'
-
-// import { TodoModel } from './todo.model'
-// import * as Utils from '../utils';
 
 export class TodoStore {
   @computed
@@ -17,11 +13,11 @@ export class TodoStore {
   @observable isAddLoading = false
   @observable isAllChecked = false
 
-  constructor(public rootStore: RootStore, private api: TodosApiService) {
+  constructor(private api: TodosApiService) {
     this.subscribeToggleDoneAll()
   }
 
-  visibleTodos(visibilityFilter: TodoFilter) {
+  getVisibleTodos(visibilityFilter: TodoFilter | undefined) {
     return this.todos.filter((todo) => {
       switch (visibilityFilter) {
         case TodoFilter.Active:
@@ -35,7 +31,7 @@ export class TodoStore {
   }
 
   @action
-  async getAll() {
+  async fetchAll() {
     this.isLoading = true
     try {
       this.todos = await this.api.getAll()
@@ -45,28 +41,6 @@ export class TodoStore {
       this.isLoading = false
     }
   }
-  /*@computed get activeTodoCount() {
-    return this.todos.reduce(
-      (sum, todo) => sum + (todo.completed ? 0 : 1),
-      0
-    )
-  }*/
-
-  /*@computed get completedCount() {
-    return this.todos.length - this.activeTodoCount;
-  }*/
-
-  /*subscribeServerToStore() {
-    reaction(
-      () => this.toJS(),
-      todos => window.fetch && fetch('/api/todos', {
-        method: 'post',
-        body: JSON.stringify({ todos }),
-        headers: new Headers({ 'Content-Type': 'application/json' })
-      })
-    );
-  }*/
-
   @action
   async remove(toRemoveTodo: Partial<Todo>) {
     const initTodos = this.todos
@@ -119,12 +93,12 @@ export class TodoStore {
   }
 
   @action
-  toggle(done: boolean) {
-    this.isAllChecked = done
+  toggleStatusAll() {
+    this.isAllChecked = !this.isAllChecked
   }
 
   @action
-  async addTodo(value) {
+  async create(value) {
     this.isAddLoading = true
     try {
       this.todos.push(await this.api.addOne({ value }))

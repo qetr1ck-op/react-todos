@@ -1,11 +1,9 @@
-import { inject, observer } from 'mobx-react'
-import React from 'react'
+import { observer } from 'mobx-react-lite'
+import React, { useContext, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router'
 
-import { TodoStore } from './store/todo'
-
+import { TodoCheckAll, TodoInput, TodoList, TodosStoreContext } from './components'
 import { Todo, TodoFilter } from './models'
-import { TodoCheckAll, TodoInput, TodoList } from './shared'
 
 import style from './todos.css'
 
@@ -13,53 +11,42 @@ interface RouterProps {
   filter?: TodoFilter
 }
 type Props = RouteComponentProps<RouterProps>
-type InjectedProps = Props & { todoStore: TodoStore }
 
-@inject('todoStore')
-@inject('routerStore')
-@observer
-export class Todos extends React.Component<Props> {
-  async componentDidMount(): Promise<void> {
-    await this.todoStore.getAll()
-  }
+export const Todos: React.FC<Props> = observer((props) => {
+  const todosStore = useContext(TodosStoreContext)
+  const visibleTodos = todosStore.getVisibleTodos(props.match.params.filter)
 
-  render() {
-    const todoStore = this.todoStore
-    const visibleTodos = todoStore.visibleTodos(this.props.match.params.filter!)
+  useEffect(() => {
+    todosStore.fetchAll()
+  }, [])
 
-    return (
-      <section className={style.main}>
-        {/*<pre>{JSON.stringify(this.state, null, 2)}</pre>*/}
-        <h1 className={style.title}>todos</h1>
-        <div className={style.header}>
-          {!!visibleTodos.length && (
-            <TodoCheckAll isAllChecked={todoStore.isAllChecked} checkAll={this.checkAllItems} />
-          )}
-          <TodoInput
-            value=""
-            disabled={todoStore.isAddLoading}
-            changeValue={({ value }: Todo) => todoStore.addTodo(value)}
-          />
-        </div>
-
-        {todoStore.isLoading ? (
-          <div>Loading...</div>
-        ) : (
-          <TodoList
-            todos={visibleTodos}
-            totalTodos={todoStore.todos.length}
-            hasDoneItems={todoStore.hasDoneItems}
+  return (
+    <section className={style.main}>
+      {/*<pre>{JSON.stringify(this.state, null, 2)}</pre>*/}
+      <h1 className={style.title}>todos</h1>
+      <div className={style.header}>
+        {!!visibleTodos.length && (
+          <TodoCheckAll
+            isAllChecked={todosStore.isAllChecked}
+            checkAll={todosStore.toggleStatusAll}
           />
         )}
-      </section>
-    )
-  }
+        <TodoInput
+          value=""
+          disabled={todosStore.isAddLoading}
+          changeValue={({ value }: Todo) => todosStore.create(value)}
+        />
+      </div>
 
-  private get todoStore(): TodoStore {
-    return (this.props as InjectedProps).todoStore
-  }
-
-  private checkAllItems = () => {
-    this.todoStore.toggle(!this.todoStore.isAllChecked)
-  }
-}
+      {todosStore.isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <TodoList
+          todos={visibleTodos}
+          totalTodos={todosStore.todos.length}
+          hasDoneItems={todosStore.hasDoneItems}
+        />
+      )}
+    </section>
+  )
+})
