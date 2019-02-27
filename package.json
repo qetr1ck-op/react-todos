@@ -84,6 +84,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
+    "lint:ts": "tslint -p tsconfig.json",
     "lint:ts:fix": "tslint -p tsconfig.json --fix",
     "lint:prettier": "pretty-quick"
   },
@@ -94,7 +95,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,json,css,md}": [
-      "npm run lint:ts:fix",
+      "npm run lint:ts",
+      "npm run lint:prettier",
       "git add"
     ]
   },
