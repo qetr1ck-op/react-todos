@@ -91,7 +91,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": ["npm run lint:ts","npm run lint:prettier --staged", "git add"]
+    "*.{ts,tsx,js,json,css,md}": ["npm run lint:ts","npm run lint:prettier --staged", "git add"]
   },
   "eslintConfig": {
     "extends": "react-app"
