@@ -14,8 +14,6 @@ const history = syncHistoryWithStore(browserHistory, routerStore)
 export function RootPage() {
   return (
     <>
-
-
       <Router history={history}>
         <Route
           exact
