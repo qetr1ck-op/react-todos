@@ -83,7 +83,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "lint:ts": "tslint -p tsconfig.json --fix",
-    "lint:prettier": "pretty-quick --staged"
+    "lint:prettier": "pretty-quick"
   },
   "husky": {
     "hooks": {
@@ -91,7 +91,9 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,json,css,md}": ["npm run lint:ts","npm run lint:prettier --staged", "git add"]
+    "*.{ts,tsx,js,json,css,md}": [
+      "npm run lint:ts"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
