@@ -94,8 +94,8 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,json,css,md}": [
-      "npm run lint:ts",
+    "*.{ts,tsx,js,css,md}": [
+      "npm run lint:ts:fix",
       "npm run lint:prettier",
       "git add"
     ]
