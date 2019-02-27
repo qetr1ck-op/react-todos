@@ -1,7 +1,7 @@
 import createBrowserHistory from 'history/createBrowserHistory'
 import DevTool from 'mobx-react-devtools'
-import { Route, Router } from 'react-router'
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
+import { Route, Router } from 'react-router'
 import * as React from 'react'
 
 import { Todos, TodosStoreProvider } from '../todos'
